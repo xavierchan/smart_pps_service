@@ -102,3 +102,9 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+.idea/
+/smart_pps_service/env.py
+
+**/migrations/*
+!**/migrations/__init__.py
