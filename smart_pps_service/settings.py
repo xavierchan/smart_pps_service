@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+import datetime
 from env import *
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -27,7 +28,7 @@ SECRET_KEY = '5kuo*-vgs-jp3-zmbmnfl160=-g*4xh@n7mjr0r47&5^-m$lu9'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
+APPEND_SLASH = False
 
 # Application definition
 
@@ -38,10 +39,14 @@ DJANGO_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework_swagger',
+    'raven.contrib.django.raven_compat',
 ]
 
 LOCAL_APPS = [
-    # 'member',
+    'member',
+    'pps',
     # 'finance',
 ]
 
@@ -52,10 +57,33 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ),
+    'PAGE_SIZE': 10,
+    'NON_FIELD_ERRORS_KEY': 'error',
+
+    'DEFAULT_THROTTLE_RATES': {
+        'captcha_min': '1/min',
+        'captcha_hour': '5/hour',
+    },
+
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
+}
+LOGIN_URL = 'rest_framework:login'
+LOGOUT_URL = 'rest_framework:logout'
+
+JWT_AUTH = {
+    # 'JWT_PAYLOAD_HANDLER':
+    # 'elite_live_restapi.jwt_handler.jwt_payload_handler',
+
+    # 'JWT_RESPONSE_PAYLOAD_HANDLER':
+    # 'elite_live_restapi.jwt_handler.jwt_response_payload_handler',
+
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),
+    'JWT_ALLOW_REFRESH': True,
 }
 
 MIDDLEWARE = [
@@ -69,6 +97,10 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'smart_pps_service.urls'
+
+SWAGGER_SETTINGS = {
+    'SHOW_REQUEST_HEADERS': True,
+}
 
 TEMPLATES = [
     {
@@ -98,6 +130,22 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+# DATABASES = {
+#     'default': {
+#         "ENGINE": "django.db.backends.mysql",
+#         "HOST": MYSQL.get('HOST'),
+#         "PORT": MYSQL.get('PORT'),
+#         "NAME": MYSQL.get('NAME'),
+#         "USER": MYSQL.get('USER'),
+#         "PASSWORD": MYSQL.get('PASSWORD'),
+#         'OPTIONS': {
+#             'charset': 'utf8mb4',
+#             'init_command': 'SET default_storage_engine=INNODB',
+#         },
+#         'TEST_CHARSET': 'utf8',
+#         'TEST_COLLATION': 'utf8_general_ci'
+#     },
+# }
 
 
 # Password validation

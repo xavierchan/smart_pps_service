@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.shortcuts import render
+from rest_framework import viewsets
+import models
+import serializers
 
-# Create your views here.
+
+class GroupViewSet(viewsets.ModelViewSet):
+
+    queryset = models.Groups.objects.all()
+    serializer_class = serializers.GroupSerializer

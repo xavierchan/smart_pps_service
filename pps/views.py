@@ -1,6 +1,18 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.shortcuts import render
+from rest_framework import viewsets
+import serializers
+import models
 
-# Create your views here.
+
+class ProductViewSet(viewsets.ModelViewSet):
+
+    queryset = models.Products.objects.all()
+    serializer_class = serializers.ProductSerializer
+
+
+class OrderViewSet(viewsets.ModelViewSet):
+
+    queryset = models.Orders.objects.all()
+    serializer_class = serializers.OrderSerializer
