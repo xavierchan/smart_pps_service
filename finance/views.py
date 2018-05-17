@@ -1,6 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.shortcuts import render
+from rest_framework import viewsets
 
-# Create your views here.
+import models
+import serializers
+
+
+class TradingRecordViewSet(viewsets.ModelViewSet):
+
+    queryset = models.TradingRecords.objects.all()
+    serializer_class = serializers.TradingRecordSerializer

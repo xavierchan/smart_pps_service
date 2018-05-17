@@ -20,7 +20,8 @@ from rest_framework import routers
 from rest_framework_swagger.views import get_swagger_view
 from member.views import GroupViewSet
 from pps.views import ProductViewSet, OrderViewSet
-from wechat.views import login as wx_login
+from finance.views import TradingRecordViewSet
+from wechat.views import LoginView
 
 schema_view = get_swagger_view(title='Smart PPS Rest API')
 
@@ -28,12 +29,13 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^docs', schema_view),
-    url(r'^wx_login', wx_login),
+    url(r'^wx_login', LoginView.as_view()),
 ]
 
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'groups', GroupViewSet, 'groups')
 router.register(r'products', ProductViewSet, 'products')
 router.register(r'orders', OrderViewSet, 'orders')
+router.register(r'trading_records', TradingRecordViewSet, 'trading_records')
 
 urlpatterns += router.urls
