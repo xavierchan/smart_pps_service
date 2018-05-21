@@ -3,7 +3,10 @@
 # @Author  : xavier
 
 import models
+from django.contrib.auth.models import User, Group
 from rest_framework import serializers
+
+from models import GroupExtension
 
 
 class PasswordSerializer(serializers.ModelSerializer):
@@ -24,6 +27,29 @@ class PasswordSerializer(serializers.ModelSerializer):
 
 
 class GroupSerializer(serializers.ModelSerializer):
+    group_type = serializers.IntegerField(source='extension.group_type')
+
     class Meta:
-        model = models.Groups
-        fields = ('id', 'crt')
+        model = Group
+        fields = ('id', 'name', 'group_type')
+
+
+class OrganizationSerializer(serializers.ModelSerializer):
+
+    def create(self, validated_data):
+        org = models.Organizations.objects.create(**validated_data)
+        return org
+
+    class Meta:
+        model = models.Organizations
+        fields = ('id', 'name', 'alias', 'crt')
+
+
+class UserSerializer(serializers.ModelSerializer):
+    gender = serializers.CharField(source='profile.gender')
+    mobile = serializers.CharField(source='profile.mobile')
+    wx_open_id = serializers.CharField(source='profile.wx_open_id')
+
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'gender', 'email', 'mobile', 'wx_open_id')

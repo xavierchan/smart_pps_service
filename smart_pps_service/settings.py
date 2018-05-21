@@ -48,6 +48,7 @@ LOCAL_APPS = [
     'member',
     'pps',
     'finance',
+    'aliyun_oss',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS;
