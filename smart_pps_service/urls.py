@@ -23,11 +23,13 @@ from pps.views import ProductViewSet, OrderViewSet
 from finance.views import TradingRecordViewSet
 from wechat.views import LoginView
 from aliyun_oss import views as aliyun_oss_views
+import views
 
 
 schema_view = get_swagger_view(title='Smart PPS Rest API')
 
 urlpatterns = [
+    url(r'^$', views.index),
     url(r'^admin/', admin.site.urls),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^docs', schema_view),

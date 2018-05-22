@@ -224,12 +224,9 @@ def notify(request):
         print 'Auth string : %s' % (auth_str)
         return HttpResponse(status=400)
 
-    # do something accoding to callback_body
-    envs = ['dev', 'beta', 'demo', 'prod']
+    # do something accoding to callback_bodytemplates
     fid = str(uuid.uuid1())
     oss_file = OssFile.objects.create(
-        env=envs.index(request.POST.get('filename').split('/')[0], 0),
-        system=request.POST.get('system'),
         uploader_id=request.POST.get('user'),
         name=request.POST.get('originName'),
         size=request.POST.get('size'),
