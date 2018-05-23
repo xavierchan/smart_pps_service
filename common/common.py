@@ -10,6 +10,8 @@ import json
 
 from django.http import HttpResponse
 from django.conf import settings
+import markdown
+from markdown.extensions.wikilinks import WikiLinkExtension
 
 
 class AuthUtils(object):
@@ -65,6 +67,7 @@ class AuthUtils(object):
                     'msg': '认证失败'
                 }), content_type='application/json')
             return func(request, *args, **kwargs)
+
         return before
 
 
@@ -79,6 +82,31 @@ def get_real_ip(request):
         'HTTP_X_FORWARDED_FOR') else request.META.get('REMOTE_ADDR')
     remote_ip = remote_ip.split(',')[0] if len(remote_ip.split(',')) > 0 else remote_ip
     return remote_ip
+
+
+def md_2_html(md_path):
+    docs_content = open(md_path).read()
+    html5_content = markdown(
+        docs_content,
+        output_format='html5',
+        extensions=[
+            'markdown.extensions.toc',
+            WikiLinkExtension(base_url='https://en.wikipedia.org/wiki/',
+                              end_url='#Hyperlinks_in_wikis'),
+            'markdown.extensions.sane_lists',
+            'markdown.extensions.codehilite',
+            'markdown.extensions.abbr',
+            'markdown.extensions.attr_list',
+            'markdown.extensions.def_list',
+            'markdown.extensions.fenced_code',
+            'markdown.extensions.footnotes',
+            'markdown.extensions.smart_strong',
+            'markdown.extensions.meta',
+            'markdown.extensions.nl2br',
+            'markdown.extensions.tables'
+        ]
+    )
+    return html5_content
 
 
 def xresult(code=0, msg='', data=None):

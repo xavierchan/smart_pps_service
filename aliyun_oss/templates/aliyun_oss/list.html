@@ -1,0 +1,78 @@
+{% extends 'common/base.html' %}
+{% load static %}
+{% block content %}
+    <div>
+        <input type="file" id="upload_file">
+    </div>
+
+    <div>
+        <table>
+            <thead>
+                <td>id</td>
+                <td>fid</td>
+                <td>key</td>
+                <td>name</td>
+                <td>type</td>
+            </thead>
+            <tbody id="tb_content"></tbody>
+        </table>
+    </div>
+    
+    <div>
+{#        <video src="/oss_media/d8527566-5e88-11e8-9ab1-186590ce907d"></video>#}
+    </div>
+
+    <script src="{% static 'js/uploader.js' %}"></script>
+    <script src="{% static 'js/jquery.tmpl.js' %}"></script>
+    <script id="ossFilesTmpl" type="text/x-jquery-tmpl">
+        <tr>
+            <td>${id}</td>
+            <td>${fid}</td>
+            <td>${key}</td>
+            <td>${name}</td>
+            <td>${type}</td>
+        </tr>
+    </script>
+    <script>
+        function renderList(ossFiles) {
+            $("#tb_content").empty();
+            $("#ossFilesTmpl").tmpl(ossFiles).appendTo("#tb_content");
+        }
+
+        function fetchList() {
+            $.ajax({
+                url: '/aliyun_oss/list',
+                type: 'GET',
+    {#            data: JSON.stringify({#}
+    {#                "username": $('#username').val(),#}
+    {#                "password": $('#password').val()#}
+    {#            }),#}
+                success: function (res) {
+                    if (res.code === 0) {
+                        renderList(res.data.list);
+                    } else {
+                        console.log('登录失败');
+                    }
+                }
+            });
+        }
+
+{#        var policyUrl = 'https://xavierit.cn/aliyun_oss/get_upload_policy';#}
+        var policyUrl = 'http://one.ngrok.elitemc.cn/aliyun_oss/get_upload_policy';
+        var uploader = new OssUploader(policyUrl);
+        uploader.uploadCallback = function (res) {
+            console.log('上传成功');
+
+            // 重置文件input
+            $('#upload_file').replaceWith($('#upload_file').val('').clone(true));
+            // 渲染列表
+            fetchList();
+        }
+        $('#upload_file').on('change', function () {
+            uploader.upload($('#upload_file')[0]);
+        });
+
+        fetchList();
+
+    </script>
+{% endblock %}

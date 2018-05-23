@@ -1,0 +1,30 @@
+{% extends 'common/base.html' %}
+{% load static %}
+{% block content %}
+    <div class="login">
+        <h1>Login</h1>
+        <input type="text" name="u" id="username" placeholder="Username" required="required"/>
+        <input type="password" name="p" id="password" placeholder="Password" required="required"/>
+        <button type="button" id="btn_login" class="btn btn-primary btn-block btn-large">Let me in.</button>
+    </div>
+    <script>
+        $('#btn_login').on('click', function () {
+            var req_data = new FormData();
+            $.ajax({
+                url: '/login',
+                type: 'POST',
+                data: JSON.stringify({
+                    "username": $('#username').val(),
+                    "password": $('#password').val()
+                }),
+                success: function (res) {
+                    if (res.code === 0) {
+                        window.location.href = '/manage';
+                    } else {
+                        console.log('登录失败');
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}

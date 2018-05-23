@@ -30,6 +30,14 @@ schema_view = get_swagger_view(title='Smart PPS Rest API')
 
 urlpatterns = [
     url(r'^$', views.index),
+    url(r'^login$', views.user_login),
+    url(r'^logout$', views.user_logout),
+    # url(r'^manage$', views.user_logout),
+    url(r'^manage/blogs$', views.user_logout),
+    url(r'^manage/aliyun_oss$', aliyun_oss_views.list),
+    url(r'^proj$', views.proj),
+    url(r'^plan$', views.plan),
+    url(r'^about$', views.about),
     url(r'^admin/', admin.site.urls),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^docs', schema_view),

@@ -1,0 +1,36 @@
+<nav class="main-nav">
+    <div class="menu-top-menu-container">
+        <ul id="menu-top-menu" class="clearfix">
+            <li class="current-menu-item"><a href="/">首页</a></li>
+            <li>
+                <a href="/proj">项目成果</a>
+                <ul class="sub-menu">
+                    <li><a href="blue-skin.html">XX教育直播平台</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="/plan">技术方案</a>
+                <ul class="sub-menu">
+                    <li><a href="/plan/video">视频网站</a></li>
+                    <li><a href="/plan/shop">电商平台</a></li>
+                    <li><a href="/plan/crm">CRM</a></li>
+                    <li><a href="/plan/pps">进销存</a></li>
+                    <li><a href="/plan/miniapp">小程序</a></li>
+                </ul>
+            </li>
+            <li><a href="http://blog.xavierit.cn">博客</a></li>
+            <li><a href="http://github.com/xavierchan">GitHub</a></li>
+            <li><a href="/about">关于我</a></li>
+            {% if user.is_authenticated %}
+                <li>
+                    <a href="/">{{ user.username }}</a>
+                    <ul class="sub-menu">
+                        <li><a href="/logout">退出</a></li>
+                    </ul>
+                </li>
+            {% else %}
+                <li><a href="/login">登录</a></li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>

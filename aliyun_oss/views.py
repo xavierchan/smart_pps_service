@@ -16,13 +16,15 @@ import rsa
 import logging
 
 from django.shortcuts import render
-from django.http.response import HttpResponse, HttpResponseRedirect
+from django.http.response import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
+from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
 from common.common import AuthUtils
 from django.conf import settings
 
-from common.common import xresult, get_real_ip
+from common.common import xresult, get_real_ip, md_2_html
 from common.oss_util import OssUtil
 from aliyun_oss.models import OssFile
 
@@ -129,12 +131,12 @@ def get_upload_policy(request):
     req_ip = get_real_ip(request)
     req_origin = request.META.get('HTTP_ORIGIN')
 
-    if mode == 'prod' and not (
-                    req_ip in settings.EDUCATION.get('ip_envs').keys() or req_origin in settings.EDUCATION.get(
-                'whilelist')):
-        return HttpResponse(json.dumps(xresult(msg='Unauthorized Request')))
-    env = 'dev/' if req_ip not in settings.EDUCATION.get('ip_envs').keys() else settings.EDUCATION.get('ip_envs').get(
-        req_ip) + '/'
+    # if mode == 'prod' and not (
+    #                 req_ip in settings.EDUCATION.get('ip_envs').keys() or req_origin in settings.EDUCATION.get(
+    #             'whilelist')):
+    #     return HttpResponse(json.dumps(xresult(msg='Unauthorized Request')))
+    # env = 'dev/' if req_ip not in settings.EDUCATION.get('ip_envs').keys() else settings.EDUCATION.get('ip_envs').get(
+    #     req_ip) + '/'
 
     # 参数
     access_key_id = settings.ALIYUN.get('AccessKeyId', '')
@@ -143,18 +145,20 @@ def get_upload_policy(request):
     endpoint = settings.ALIYUN.get('oss', {}).get('Endpoint', '')
     host = 'http://%s.%s' % (bucket, endpoint)
     expire_time = settings.ALIYUN.get('oss', {}).get('ExpireTime', 30)
-    upload_dir = env
+    upload_dir = 'dev/'
 
     expire_syncpoint = int(time.time()) + expire_time
     expire = get_iso_8601(expire_syncpoint)
     policy_encode = base64.b64encode(json.dumps({
         'expiration': expire,
-        'conditions': [['starts-with', '$key', upload_dir]]
+        'conditions': [
+            ['starts-with', '$key', upload_dir]
+        ]
     }).strip())
     h = hmac.new(access_key_secret, policy_encode, sha)
     sign_result = base64.encodestring(h.digest()).strip()
     base64_callback_body = base64.b64encode(json.dumps({
-        'callbackUrl': '%s/aliyun_oss/notify' % settings.SYSTEM.get('domain', ''),
+        'callbackUrl': '%s/aliyun_oss/notify' % settings.SYSTEM.get('DOMAIN', ''),
         'callbackBody': 'filename=${object}&size=${size}&mimeType=${mimeType}' +
                         '&system={system}&user={user}&req_ip={req_ip}'.format(system=system, user=user,
                                                                               req_ip=req_ip) + '&originName=${x:originname}',
@@ -263,14 +267,16 @@ def read(request, fid=None):
         response['Content-Disposition'] = 'attachment;filename=' + urllib.quote(filename.encode('utf-8'))
         response['Content-Length'] = file_like.content_length
     else:
-        response = HttpResponseRedirect(
-            'https://e-ducation.oss-cn-shenzhen.aliyuncs.com/' + oss_file.key + '?' + request.META['QUERY_STRING'])
         query_string = '' if len(request.META['QUERY_STRING']) == 0 else '?' + request.META['QUERY_STRING']
         response = HttpResponseRedirect(
-            'https://e-ducation.oss-cn-shenzhen.aliyuncs.com/' + oss_file.key + query_string)
-
+            'https://{bucket}.{endpoint}/{key}{query_string}'.format(
+                bucket=settings.ALIYUN.get('oss').get('Buckets')[0],
+                endpoint=settings.ALIYUN.get('oss').get('Endpoint'),
+                key=oss_file.key,
+                query_string=query_string
+            )
+        )
         # response = HttpResponse(file_like, content_type=file_like.content_type)
-
     return response
 
 
@@ -307,16 +313,14 @@ def batch_del_objects(request):
     return response
 
 
-@csrf_exempt
+# @csrf_exempt
 # @AuthUtils.auth_check
 def file_list(request):
-    size = request.POST.get('size')
-    objs = oss_util.list_object(10)
-    return HttpResponse(json.dumps({
-        'code': '200',
-        'detail': objs,
-        'msg': ''
-    }), content_type='application/json')
+    paginator = Paginator(OssFile.objects.all(), 10)
+
+    return JsonResponse(xresult(data={
+        'list': [obj for obj in paginator.page(1).object_list.values('id', 'fid', 'key', 'name', 'type')]
+    }))
 
 
 def api_docs(request):
@@ -407,3 +411,8 @@ def app_callback(request):
 
 def file_upload(request):
     return render(request, 'aliyun_oss/uploader.html')
+
+
+@login_required
+def list(request):
+    return render(request, 'aliyun_oss/list.html')

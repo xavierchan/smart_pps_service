@@ -1,0 +1,54 @@
+{% load static %}
+<!doctype html>
+<!--[if lt IE 7]> <html class="lt-ie9 lt-ie8 lt-ie7" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="lt-ie9 lt-ie8" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="lt-ie9" lang="en-US"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="en-US">
+<!--<![endif]-->
+
+<head>
+    <!-- META TAGS -->
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>暴走的二进制</title>
+    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}"/>
+
+    {% include "common/css.html" %}
+
+    <script type='text/javascript' src='{% static "js/jquery-1.8.3.min.js" %}'></script>
+
+</head>
+
+<body>
+    <!-- Start of Header -->
+    <div class="header-wrapper">
+        <header>
+            <div class="container">
+                <div class="logo-container">
+                    <!-- Website Logo -->
+                    <a href="/" title="暴走的二进制">
+                        <img src='{% static "images/logo.png" %}' alt="暴走的二进制">
+                    </a>
+                    <span class="tag-line">暴走的二进制</span>
+                </div>
+                <!-- Main Navigation -->
+                {% include "common/nav.html" %}
+            </div>
+        </header>
+    </div>
+    <!-- End of Header -->
+
+    <div style="height: 700px; padding: 50px 100px;">
+        {% block content %}
+            <div>这里是默认内容，所有继承自这个模板的，如果不覆盖就显示这里的默认内容。</div>
+        {% endblock %}
+    </div>
+
+    {% include "common/footer.html" %}
+
+    {% include "common/js.html" %}
+
+</body>
+
+</html>
