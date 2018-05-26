@@ -127,28 +127,28 @@ WSGI_APPLICATION = 'smart_pps_service.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
 # DATABASES = {
 #     'default': {
-#         "ENGINE": "django.db.backends.mysql",
-#         "HOST": MYSQL.get('HOST'),
-#         "PORT": MYSQL.get('PORT'),
-#         "NAME": MYSQL.get('NAME'),
-#         "USER": MYSQL.get('USER'),
-#         "PASSWORD": MYSQL.get('PASSWORD'),
-#         'OPTIONS': {
-#             'charset': 'utf8mb4',
-#             'init_command': 'SET default_storage_engine=INNODB',
-#         },
-#         'TEST_CHARSET': 'utf8',
-#         'TEST_COLLATION': 'utf8_general_ci'
-#     },
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
 # }
+DATABASES = {
+    'default': {
+        "ENGINE": "django.db.backends.mysql",
+        "HOST": MYSQL.get('HOST'),
+        "PORT": MYSQL.get('PORT'),
+        "NAME": MYSQL.get('NAME'),
+        "USER": MYSQL.get('USER'),
+        "PASSWORD": MYSQL.get('PASSWORD'),
+        'OPTIONS': {
+            'charset': 'utf8mb4',
+            'init_command': 'SET default_storage_engine=INNODB',
+        },
+        'TEST_CHARSET': 'utf8',
+        'TEST_COLLATION': 'utf8_general_ci'
+    },
+}
 
 
 # Password validation

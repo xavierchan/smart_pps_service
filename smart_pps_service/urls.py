@@ -32,7 +32,7 @@ urlpatterns = [
     url(r'^$', views.index),
     url(r'^login$', views.user_login),
     url(r'^logout$', views.user_logout),
-    # url(r'^manage$', views.user_logout),
+    url(r'^manage$', views.manage),
     url(r'^manage/blogs$', views.user_logout),
     url(r'^manage/aliyun_oss$', aliyun_oss_views.list),
     url(r'^proj$', views.proj),

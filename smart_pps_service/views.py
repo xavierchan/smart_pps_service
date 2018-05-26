@@ -48,6 +48,10 @@ def user_logout(request):
     return HttpResponseRedirect('/')
 
 
+def manage(request):
+    return render(request, 'manage.html')
+
+
 def proj(request):
     return render(request, 'proj.html')
 
