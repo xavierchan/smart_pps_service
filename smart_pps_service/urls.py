@@ -20,20 +20,30 @@ from rest_framework import routers
 from rest_framework_swagger.views import get_swagger_view
 from member.views import UserViewSet, OrganizationViewSet, GroupViewSet
 from pps.views import ProductViewSet, OrderViewSet
+from blog.views import ArticleViewSet
 from finance.views import TradingRecordViewSet
 from wechat.views import LoginView
 from aliyun_oss import views as aliyun_oss_views
 import views
 
 
-schema_view = get_swagger_view(title='Smart PPS Rest API')
+schema_view = get_swagger_view(title='One Service Rest API')
+
+router = routers.DefaultRouter(trailing_slash=False)
+router.register(r'articles',ArticleViewSet, 'articles')
+router.register(r'orgs', OrganizationViewSet, 'orgs')
+router.register(r'groups', GroupViewSet, 'groups')
+router.register(r'users', UserViewSet, 'users')
+router.register(r'products', ProductViewSet, 'products')
+router.register(r'orders', OrderViewSet, 'orders')
+router.register(r'trading_records', TradingRecordViewSet, 'trading_records')
 
 urlpatterns = [
     url(r'^$', views.index),
     url(r'^login$', views.user_login),
     url(r'^logout$', views.user_logout),
     url(r'^manage$', views.manage),
-    url(r'^manage/blogs$', views.user_logout),
+    url(r'^manage/blogs$', include('blog.urls')),
     url(r'^manage/aliyun_oss$', aliyun_oss_views.list),
     url(r'^proj$', views.proj),
     url(r'^plan$', views.plan),
@@ -46,14 +56,5 @@ urlpatterns = [
     url(r'^aliyun_oss/', include('aliyun_oss.urls')),
     url(r'^oss_media/(?P<fid>[0-9a-zA-Z\-]+)', aliyun_oss_views.read),
     # url(r'^short_link/', include('short_link.urls')),
+    url(r'^api/', include(router.urls)),
 ]
-
-router = routers.DefaultRouter(trailing_slash=False)
-router.register(r'orgs', OrganizationViewSet, 'orgs')
-router.register(r'groups', GroupViewSet, 'groups')
-router.register(r'users', UserViewSet, 'users')
-router.register(r'products', ProductViewSet, 'products')
-router.register(r'orders', OrderViewSet, 'orders')
-router.register(r'trading_records', TradingRecordViewSet, 'trading_records')
-
-urlpatterns += router.urls

@@ -3,11 +3,12 @@ from __future__ import unicode_literals
 
 import json
 
+from django.contrib.auth import authenticate, login, logout
+from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse, HttpResponseRedirect
-from django.contrib.auth import authenticate, login, logout
-from common.common import xresult
+
+from smart_pps_service.common.common import xresult
 
 
 def index(request):

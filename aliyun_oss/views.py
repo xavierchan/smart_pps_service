@@ -1,32 +1,31 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import logging
-import json
-import urllib
-import urllib2
-import datetime
-import random
-import uuid
-import time
 import base64
 import hmac
-from hashlib import sha1 as sha
-import rsa
+import json
 import logging
+import random
+import urllib
+import urllib2
+import uuid
+from hashlib import sha1 as sha
 
-from django.shortcuts import render
+import datetime
+import rsa
+import time
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.http.response import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
-from django.core.paginator import Paginator
-from django.contrib.auth.decorators import login_required
-from common.common import AuthUtils
-from django.conf import settings
 
-from common.common import xresult, get_real_ip, md_2_html
-from common.oss_util import OssUtil
 from aliyun_oss.models import OssFile
+from common.oss_util import OssUtil
+from smart_pps_service.common.common import AuthUtils
+from smart_pps_service.common.common import xresult, get_real_ip, md_2_html
 
 
 logger = logging.getLogger('oss')

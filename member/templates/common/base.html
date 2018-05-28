@@ -7,58 +7,58 @@
 <html lang="en-US">
 <!--<![endif]-->
 
-<head>
-    <!-- META TAGS -->
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>暴走的二进制</title>
-    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}"/>
+    <head>
+        <!-- META TAGS -->
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>暴走的二进制</title>
+        <link rel="shortcut icon" href="{% static 'images/favicon.png' %}"/>
 
-    {% include "common/css.html" %}
+        {% include "common/css.html" %}
 
-    <script type='text/javascript' src='{% static "js/jquery-1.8.3.min.js" %}'></script>
+        <script type='text/javascript' src='{% static "js/jquery-1.8.3.min.js" %}'></script>
 
-    <!-- 百度统计 -->
-    <script>
-        var _hmt = _hmt || [];
-        (function() {
-          var hm = document.createElement("script");
-          hm.src = "https://hm.baidu.com/hm.js?5548934cba38248a70b97e0882763368";
-          var s = document.getElementsByTagName("script")[0];
-          s.parentNode.insertBefore(hm, s);
-        })();
-    </script>
-</head>
+        <!-- 百度统计 -->
+        <script>
+            var _hmt = _hmt || [];
+            (function() {
+              var hm = document.createElement("script");
+              hm.src = "https://hm.baidu.com/hm.js?5548934cba38248a70b97e0882763368";
+              var s = document.getElementsByTagName("script")[0];
+              s.parentNode.insertBefore(hm, s);
+            })();
+        </script>
+    </head>
 
-<body>
-    <!-- Start of Header -->
-    <div class="header-wrapper">
-        <header>
-            <div class="container">
-                <div class="logo-container">
-                    <!-- Website Logo -->
-                    <a href="/" title="暴走的二进制">
-                        <img src='{% static "images/logo.png" %}' alt="暴走的二进制">
-                    </a>
-                    <span class="tag-line">暴走的二进制</span>
+    <body>
+        <!-- Start of Header -->
+        <div class="header-wrapper">
+            <header>
+                <div class="container">
+                    <div class="logo-container">
+                        <!-- Website Logo -->
+                        <a href="/" title="暴走的二进制">
+                            <img src='{% static "images/logo.png" %}' alt="暴走的二进制">
+                        </a>
+                        <span class="tag-line">暴走的二进制</span>
+                    </div>
+                    <!-- Main Navigation -->
+                    {% include "common/nav.html" %}
                 </div>
-                <!-- Main Navigation -->
-                {% include "common/nav.html" %}
-            </div>
-        </header>
-    </div>
-    <!-- End of Header -->
+            </header>
+        </div>
+        <!-- End of Header -->
 
-    <div>
-        {% block content %}
-            <div>这里是默认内容，所有继承自这个模板的，如果不覆盖就显示这里的默认内容。</div>
-        {% endblock %}
-    </div>
+        <div>
+            {% block content %}
+                <div>这里是默认内容，所有继承自这个模板的，如果不覆盖就显示这里的默认内容。</div>
+            {% endblock %}
+        </div>
 
-    {% include "common/footer.html" %}
+        {% include "common/footer.html" %}
 
-    {% include "common/js.html" %}
+        {% include "common/js.html" %}
 
-</body>
+    </body>
 
 </html>

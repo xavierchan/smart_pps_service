@@ -1,0 +1,49 @@
+{% extends 'common/base.html' %}
+{% load static %}
+{% block content %}
+    <div>
+        <table>
+            <thead>
+                <td>id</td>
+                <td>title</td>
+                <td>crt</td>
+                <td>upt</td>
+            </thead>
+            <tbody id="tb_content"></tbody>
+        </table>
+    </div>
+
+    <script src="{% static 'js/uploader.js' %}"></script>
+    <script src="{% static 'js/jquery.tmpl.js' %}"></script>
+    <script id="blogTmpl" type="text/x-jquery-tmpl">
+        <tr>
+            <td>${id}</td>
+            <td>${title}</td>
+            <td>${crt}</td>
+            <td>${upt}</td>
+        </tr>
+    </script>
+    <script>
+        function renderList(blogs) {
+            $("#tb_content").empty();
+            $("#blogTmpl").tmpl(blogs).appendTo("#tb_content");
+        }
+
+        function fetchList() {
+            $.ajax({
+                url: '/api/articles',
+                type: 'GET',
+                success: function (res) {
+                    if (res.code === 0) {
+                        renderList(res.data);
+                    } else {
+                        console.log('获取失败');
+                    }
+                }
+            });
+        }
+
+        fetchList();
+
+    </script>
+{% endblock %}

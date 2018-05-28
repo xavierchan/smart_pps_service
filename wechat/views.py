@@ -1,18 +1,18 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import urllib2
 import json
+import urllib2
 
-from django.http.response import JsonResponse
-from django.contrib.auth.models import User
 from django.conf import settings
-from rest_framework.views import APIView
+from django.contrib.auth.models import User
+from django.http.response import JsonResponse
 from rest_framework.permissions import AllowAny
+from rest_framework.views import APIView
 from rest_framework_jwt.settings import api_settings
 
-from common.common import xresult
 from member.models import MemberProfile
+from smart_pps_service.common.common import xresult
 
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
