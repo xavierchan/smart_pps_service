@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 
 from smart_pps_service.common.common import xresult
 
@@ -49,6 +50,7 @@ def user_logout(request):
     return HttpResponseRedirect('/')
 
 
+@login_required
 def manage(request):
     return render(request, 'manage.html')
 

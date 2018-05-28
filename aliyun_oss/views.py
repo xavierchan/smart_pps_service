@@ -415,3 +415,8 @@ def file_upload(request):
 @login_required
 def list(request):
     return render(request, 'aliyun_oss/list.html')
+
+
+@login_required
+def index(request):
+    return render(request, 'aliyun_oss/index.html')
