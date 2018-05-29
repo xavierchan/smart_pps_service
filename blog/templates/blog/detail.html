@@ -1,0 +1,20 @@
+{% extends 'common/base.html' %}
+{% load static %}
+{% block content %}
+
+    <!-- Start of Page Container -->
+    <div class="page-container">
+        <div class="container">
+            <div class="row">
+                <!-- start of page content -->
+                <aside class="span12 page-sidebar">
+                    {% autoescape off %}
+                        {{ blog_content }}
+                    {% endautoescape %}
+                </aside>
+            </div>
+        </div>
+    </div>
+    <!-- End of Page Container -->
+
+{% endblock %}

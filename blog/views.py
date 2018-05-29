@@ -7,11 +7,23 @@ from smart_pps_service.common import viewsets
 from rest_framework import permissions
 import serializers
 from models import Article
+from smart_pps_service.common.common import md_2_html2
 
 
 @login_required
 def index(request):
     return render(request, 'blog/list.html')
+
+
+def detail(request, id):
+    try:
+        obj = Article.objects.get(id=id)
+    except Exception as e:
+        pass
+    html5_content = md_2_html2(obj.content)
+    return render(request, 'blog/detail.html', {
+        'blog_content': html5_content.replace('<table>', '<table class="table">')
+    })
 
 
 class ArticleViewSet(viewsets.ModelViewSet):

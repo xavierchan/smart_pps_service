@@ -10,8 +10,7 @@ import json
 
 from django.http import HttpResponse
 from django.conf import settings
-import markdown
-from markdown.extensions.wikilinks import WikiLinkExtension
+from markdown import markdown
 
 
 class AuthUtils(object):
@@ -93,6 +92,28 @@ def md_2_html(md_path):
             'markdown.extensions.toc',
             WikiLinkExtension(base_url='https://en.wikipedia.org/wiki/',
                               end_url='#Hyperlinks_in_wikis'),
+            'markdown.extensions.sane_lists',
+            'markdown.extensions.codehilite',
+            'markdown.extensions.abbr',
+            'markdown.extensions.attr_list',
+            'markdown.extensions.def_list',
+            'markdown.extensions.fenced_code',
+            'markdown.extensions.footnotes',
+            'markdown.extensions.smart_strong',
+            'markdown.extensions.meta',
+            'markdown.extensions.nl2br',
+            'markdown.extensions.tables'
+        ]
+    )
+    return html5_content
+
+
+def md_2_html2(docs_content):
+    html5_content = markdown(
+        docs_content,
+        output_format='html5',
+        extensions=[
+            'markdown.extensions.toc',
             'markdown.extensions.sane_lists',
             'markdown.extensions.codehilite',
             'markdown.extensions.abbr',

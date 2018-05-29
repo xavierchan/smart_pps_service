@@ -20,7 +20,7 @@ from rest_framework import routers
 from rest_framework_swagger.views import get_swagger_view
 from member.views import UserViewSet, OrganizationViewSet, GroupViewSet
 from pps.views import ProductViewSet, OrderViewSet
-from blog.views import ArticleViewSet
+from blog import views as blog_views
 from finance.views import TradingRecordViewSet
 from wechat.views import LoginView
 from aliyun_oss import views as aliyun_oss_views
@@ -30,7 +30,7 @@ import views
 schema_view = get_swagger_view(title='One Service Rest API')
 
 router = routers.DefaultRouter(trailing_slash=False)
-router.register(r'articles',ArticleViewSet, 'articles')
+router.register(r'articles', blog_views.ArticleViewSet, 'articles')
 router.register(r'orgs', OrganizationViewSet, 'orgs')
 router.register(r'groups', GroupViewSet, 'groups')
 router.register(r'users', UserViewSet, 'users')
@@ -42,6 +42,7 @@ urlpatterns = [
     url(r'^$', views.index),
     url(r'^login$', views.user_login),
     url(r'^logout$', views.user_logout),
+    url(r'^blogs/(\d+)$', blog_views.detail),
     url(r'^manage$', views.manage),
     url(r'^manage/blogs', include('blog.urls')),
     url(r'^manage/aliyun_oss', include('aliyun_oss.urls')),

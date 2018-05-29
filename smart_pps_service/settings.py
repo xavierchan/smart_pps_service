@@ -91,6 +91,9 @@ JWT_AUTH = {
     'JWT_ALLOW_REFRESH': True,
 }
 
+CELERY_BROKER_URL = 'amqp://guest:guest@127.0.0.1:5672//'
+CELERY_RESULT_BACKEND = 'redis://{host}:{port}/0'.format(host=REDIS.get('HOST'), port=REDIS.get('PORT'))
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
