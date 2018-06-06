@@ -1,0 +1,216 @@
+{% extends 'common/base.html' %}
+{% load static %}
+{% block content %}
+
+    <!-- Start of Page Container -->
+    <div class="page-container">
+        <div class="container">
+            <div class="row">
+                <!-- start of page content -->
+                <aside class="span2 page-sidebar">
+                    <a href="javascript:resetBlog()">写文章</a>
+                    <div>
+                        <table>
+                            <thead>
+                                <td>id</td>
+                                <td>title</td>
+{#                                <td>crt</td>#}
+{#                                <td>upt</td>#}
+                                <td>oprea</td>
+                            </thead>
+                            <tbody id="tb_content"></tbody>
+                        </table>
+                    </div>
+                </aside>
+                <aside class="span10 page-sidebar">
+                    {% csrf_token %}
+                    <input type="hidden" id="id">
+                    标题：<input type="text" id="title">
+                    <button type="button" id="save_btn">保存</button>
+                    <div id="test-editormd"></div>
+                </aside>
+            </div>
+        </div>
+    </div>
+    <!-- End of Page Container -->
+
+    <script src="{% static 'js/editormd.min.js' %}"></script>
+    <script src="{% static 'js/jquery.tmpl.js' %}"></script>
+    <script id="blogTmpl" type="text/x-jquery-tmpl">
+        <tr>
+            <td>${id}</td>
+            <td><a href="javascript:fetchDetail('${id}')">${title}</a></td>
+            <td><a href="javascript:delBlog('${id}')">删除</a></td>
+{#            <td>${crt}</td>#}
+{#            <td>${upt}</td>#}
+        </tr>
+    </script>
+    <script>
+        function renderList(blogs) {
+            $("#tb_content").empty();
+            $("#blogTmpl").tmpl(blogs).appendTo("#tb_content");
+        }
+
+        function fetchList() {
+            $.ajax({
+                url: '/api/articles',
+                type: 'GET',
+                success: function (res) {
+                    if (res.code === 0) {
+                        renderList(res.data);
+                    } else {
+                        console.log('获取失败');
+                    }
+                }
+            });
+        }
+
+        function fetchDetail(id) {
+            $.ajax({
+                url: '/api/articles/' + id,
+                type: 'GET',
+                success: function (res) {
+                    $('#id').val(id);
+                    $('#title').val(res.title);
+                    mdEditor.setMarkdown(res.content);
+{#                    if (res.code === 0) {#}
+{#                        $('#title').val(res.data.title);#}
+{#                        mdEditor.markdown = res.data.content;#}
+{#                    } else {#}
+{#                        console.log('获取失败');#}
+{#                    }#}
+                }
+            });
+        }
+
+        function update(obj) {
+            $.ajax({
+                url: '/api/articles/' + obj.id,
+                type: 'PUT',
+                data: JSON.stringify(obj),
+                contentType: 'application/json',
+                headers:{
+                    "X-CSRFtoken": $('input[name=csrfmiddlewaretoken]').val()
+                },
+                success: function (res) {
+                    fetchList();
+{#                    if (res.code === 0) {#}
+{#                        fetchList();#}
+{#                        console.log('保存成功');#}
+{#                    } else {#}
+{#                        console.log('获取失败');#}
+{#                    }#}
+                }
+            });
+        }
+
+        function create(obj) {
+            $.ajax({
+                url: '/api/articles',
+                type: 'POST',
+                data: JSON.stringify(obj),
+                contentType: 'application/json',
+                headers:{
+                    "X-CSRFtoken": $('input[name=csrfmiddlewaretoken]').val()
+                },
+                success: function (res) {
+                    $('#id').val(res.id);
+                    fetchList();
+{#                    if (res.code === 0) {#}
+{#                        fetchList();#}
+{#                    } else {#}
+{#                        console.log('保存失败');#}
+{#                    }#}
+                }
+            });
+        }
+        
+        function resetBlog() {
+            $('#id').val('');
+            $('#title').val('');
+            mdEditor.setMarkdown('');
+        }
+        
+        function delBlog(id) {
+            $.ajax({
+                url: '/api/articles/' + id,
+                type: 'DELETE',
+                headers:{
+                    "X-CSRFtoken": $('input[name=csrfmiddlewaretoken]').val()
+                },
+                success: function (res) {
+                    fetchList();
+                    if(id === $('#id').val()) {
+                        resetBlog();
+                    }
+{#                    if (res.code === 0) {#}
+{#                        fetchList();#}
+{#                    } else {#}
+{#                        console.log('保存失败');#}
+{#                    }#}
+                }
+            });
+        }
+
+        mdEditor = editormd("test-editormd", {
+            width: "90%",
+            height: 740,
+            path : '/static/lib/',
+            theme : "default",
+            previewTheme : "default",
+            editorTheme : "default",
+            markdown : '',
+            codeFold : true,
+            //syncScrolling : false,
+            saveHTMLToTextarea : true,    // 保存 HTML 到 Textarea
+            searchReplace : true,
+            //watch : false,                // 关闭实时预览
+            htmlDecode : "style,script,iframe|on*",            // 开启 HTML 标签解析，为了安全性，默认不开启
+            //toolbar  : false,             //关闭工具栏
+            //previewCodeHighlight : false, // 关闭预览 HTML 的代码块高亮，默认开启
+            emoji : true,
+            taskList : true,
+            tocm            : true,         // Using [TOCM]
+            tex : true,                   // 开启科学公式TeX语言支持，默认关闭
+            flowChart : true,             // 开启流程图支持，默认关闭
+            sequenceDiagram : true,       // 开启时序/序列图支持，默认关闭,
+            //dialogLockScreen : false,   // 设置弹出层对话框不锁屏，全局通用，默认为true
+            //dialogShowMask : false,     // 设置弹出层对话框显示透明遮罩层，全局通用，默认为true
+            //dialogDraggable : false,    // 设置弹出层对话框不可拖动，全局通用，默认为true
+            //dialogMaskOpacity : 0.4,    // 设置透明遮罩层的透明度，全局通用，默认值为0.1
+            //dialogMaskBgColor : "#000", // 设置透明遮罩层的背景颜色，全局通用，默认为#fff
+            imageUpload : true,
+            imageFormats : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+            imageUploadURL : "./php/upload.php",
+            onload : function() {
+                //console.log('onload', this);
+                //this.fullscreen();
+                //this.unwatch();
+                //this.watch().fullscreen();
+
+                //this.setMarkdown("#PHP");
+                //this.width("100%");
+                //this.height(480);
+                //this.resize("100%", 640);
+            }
+        });
+
+        $('#save_btn').on('click', function () {
+            var id = $('#id').val();
+            var obj = {
+                "title": $('#title').val(),
+                "content": mdEditor.getMarkdown()
+            };
+
+            if (id) {
+                obj.id = id;
+                update(obj);
+            } else {
+                create(obj);
+            }
+        });
+
+        fetchList();
+
+    </script>
+{% endblock %}

@@ -2,53 +2,147 @@
 {% load static %}
 {% block content %}
 
+    <style>
+        .note-list {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .note-list li.have-img {
+            min-height: 140px;
+        }
+
+        .note-list li {
+            position: relative;
+            width: 100%;
+            margin: 0 0 15px;
+            padding-right: 2px;
+            border-bottom: 1px solid #f0f0f0;
+            word-wrap: break-word;
+        }
+
+        .note-list .have-img>div {
+            padding-right: 140px;
+        }
+
+        .title {
+            font-family: -apple-system,SF UI Display,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif;
+        }
+
+        .note-list .have-img .wrap-img {
+            position: absolute;
+            top: 50%;
+            margin-top: -60px;
+            right: 0;
+            width: 125px;
+            height: 100px;
+        }
+
+        .note-list .title {
+            margin: -7px 0 4px;
+            display: inherit;
+            font-size: 18px;
+            font-weight: 700;
+            line-height: 1.5;
+        }
+
+        img {
+            vertical-align: middle;
+        }
+
+        div {
+            display: block;
+        }
+
+        li {
+            line-height: 20px;
+            display: list-item;
+            text-align: -webkit-match-parent;
+        }
+    </style>
     <!-- Start of Page Container -->
     <div class="page-container">
         <div class="container">
             <div class="row">
                 <!-- start of page content -->
-                <aside class="span2 page-sidebar">
-                    <a href="javascript:resetBlog()">写文章</a>
-                    <div>
-                        <table>
-                            <thead>
-                                <td>id</td>
-                                <td>title</td>
-{#                                <td>crt</td>#}
-{#                                <td>upt</td>#}
-                                <td>oprea</td>
-                            </thead>
-                            <tbody id="tb_content"></tbody>
-                        </table>
-                    </div>
+                <aside class="span8 page-sidebar">
+                    <ul class="note-list" id="list_content">
+                        <li id="note-28491853" data-note-id="28491853" class="have-img">
+                            <a class="wrap-img" href="/p/3b4b5ac2ea68" target="_blank">
+                              <img class="  img-blur-done" src="//upload-images.jianshu.io/upload_images/3343569-4bcf991e16d299a1?imageMogr2/auto-orient/strip|imageView2/1/w/300/h/240" alt="120">
+                            </a>
+                          <div class="content">
+                            <a class="title" target="_blank" href="/p/3b4b5ac2ea68">山城重庆 | 桥上之城的都市风光</a>
+                            <p class="abstract">
+                              随处可见的长江大桥 全国的城市里，只有重庆的长江大桥最多，建好的有36座。重庆是个两江环绕的山城，桥担负着行车、行人、行轻轨的重担。 长江上总共...
+                            </p>
+                            <div class="meta">
+                              <a class="nickname" target="_blank" href="/u/b3b2c03354f3">吴晓布</a>
+                                <a target="_blank" href="/p/3b4b5ac2ea68#comments">
+                                  <i class="iconfont ic-list-comments"></i> 34
+                        </a>      <span><i class="iconfont ic-list-like"></i> 37</span>
+                                <span><i class="iconfont ic-list-money"></i> 2</span>
+                            </div>
+                          </div>
+                        </li>
+                    </ul>
                 </aside>
-                <aside class="span10 page-sidebar">
-                    {% csrf_token %}
-                    <input type="hidden" id="id">
-                    标题：<input type="text" id="title">
-                    <button type="button" id="save_btn">保存</button>
-                    <div id="test-editormd"></div>
+                <aside class="span4 page-sidebar">
+                    <section class="widget">
+                        <div class="quick-links-widget">
+                            <h3 class="title">热门文章</h3>
+                            <ul id="menu-quick-links" class="menu clearfix">
+                                <li><a href="index-2.html">Home</a></li>
+                                <li><a href="articles-list.html">Articles List</a></li>
+                                <li><a href="faq.html">FAQs</a></li>
+                                <li><a href="contact.html">Contact</a></li>
+                            </ul>
+                        </div>
+                    </section>
+                    <section class="widget">
+                        <div class="quick-links-widget">
+                            <h3 class="title">最近发布</h3>
+                            <ul id="menu-quick-links" class="menu clearfix">
+                                <li><a href="index-2.html">Home</a></li>
+                                <li><a href="articles-list.html">Articles List</a></li>
+                                <li><a href="faq.html">FAQs</a></li>
+                                <li><a href="contact.html">Contact</a></li>
+                            </ul>
+                        </div>
+                    </section>
                 </aside>
             </div>
         </div>
     </div>
     <!-- End of Page Container -->
 
-    <script src="{% static 'js/editormd.min.js' %}"></script>
     <script src="{% static 'js/jquery.tmpl.js' %}"></script>
     <script id="blogTmpl" type="text/x-jquery-tmpl">
-        <tr>
-            <td>${id}</td>
-            <td><a href="javascript:fetchDetail('${id}')">${title}</a></td>
-            <td><a href="javascript:delBlog('${id}')">删除</a></td>
-{#            <td>${crt}</td>#}
-{#            <td>${upt}</td>#}
-        </tr>
+        <li id="note-28491853" data-note-id="28491853" class="have-img">
+            <a class="wrap-img" href="/p/3b4b5ac2ea68" target="_blank">
+              <img class="  img-blur-done" src="//upload-images.jianshu.io/upload_images/3343569-4bcf991e16d299a1?imageMogr2/auto-orient/strip|imageView2/1/w/300/h/240" alt="120">
+            </a>
+          <div class="content">
+            <a class="title" target="_blank" href="/blogs/${id}">${title}</a>
+            <p class="abstract">
+              随处可见的长江大桥 全国的城市里，只有重庆的长江大桥最多，建好的有36座。重庆是个两江环绕的山城，桥担负着行车、行人、行轻轨的重担。 长江上总共...
+            </p>
+            <div class="meta">
+              <a class="nickname" target="_blank" href="/u/b3b2c03354f3">吴晓布</a>
+                <a target="_blank" href="/p/3b4b5ac2ea68#comments">
+                  <i class="iconfont ic-list-comments"></i> 34
+                </a>
+                <span><i class="iconfont ic-list-like"></i> 37</span>
+                <span><i class="iconfont ic-list-money"></i> 2</span>
+            </div>
+          </div>
+        </li>
     </script>
     <script>
         function renderList(blogs) {
-            $("#tb_content").empty();
-            $("#blogTmpl").tmpl(blogs).appendTo("#tb_content");
+            $("#list_content").empty();
+            $("#blogTmpl").tmpl(blogs).appendTo("#list_content");
         }
 
         function fetchList() {
@@ -64,151 +158,6 @@
                 }
             });
         }
-
-        function fetchDetail(id) {
-            $.ajax({
-                url: '/api/articles/' + id,
-                type: 'GET',
-                success: function (res) {
-                    $('#id').val(id);
-                    $('#title').val(res.title);
-                    mdEditor.setMarkdown(res.content);
-{#                    if (res.code === 0) {#}
-{#                        $('#title').val(res.data.title);#}
-{#                        mdEditor.markdown = res.data.content;#}
-{#                    } else {#}
-{#                        console.log('获取失败');#}
-{#                    }#}
-                }
-            });
-        }
-
-        function update(obj) {
-            $.ajax({
-                url: '/api/articles/' + obj.id,
-                type: 'PUT',
-                data: JSON.stringify(obj),
-                contentType: 'application/json',
-                headers:{
-                    "X-CSRFtoken": $('input[name=csrfmiddlewaretoken]').val()
-                },
-                success: function (res) {
-                    fetchList();
-{#                    if (res.code === 0) {#}
-{#                        fetchList();#}
-{#                        console.log('保存成功');#}
-{#                    } else {#}
-{#                        console.log('获取失败');#}
-{#                    }#}
-                }
-            });
-        }
-
-        function create(obj) {
-            $.ajax({
-                url: '/api/articles',
-                type: 'POST',
-                data: JSON.stringify(obj),
-                contentType: 'application/json',
-                headers:{
-                    "X-CSRFtoken": $('input[name=csrfmiddlewaretoken]').val()
-                },
-                success: function (res) {
-                    $('#id').val(res.id);
-                    fetchList();
-{#                    if (res.code === 0) {#}
-{#                        fetchList();#}
-{#                    } else {#}
-{#                        console.log('保存失败');#}
-{#                    }#}
-                }
-            });
-        }
-        
-        function resetBlog() {
-            $('#id').val('');
-            $('#title').val('');
-            mdEditor.setMarkdown('');
-        }
-        
-        function delBlog(id) {
-            $.ajax({
-                url: '/api/articles/' + id,
-                type: 'DELETE',
-                headers:{
-                    "X-CSRFtoken": $('input[name=csrfmiddlewaretoken]').val()
-                },
-                success: function (res) {
-                    fetchList();
-                    if(id === $('#id').val()) {
-                        resetBlog();
-                    }
-{#                    if (res.code === 0) {#}
-{#                        fetchList();#}
-{#                    } else {#}
-{#                        console.log('保存失败');#}
-{#                    }#}
-                }
-            });
-        }
-
-        mdEditor = editormd("test-editormd", {
-            width: "90%",
-            height: 740,
-            path : '/static/lib/',
-            theme : "default",
-            previewTheme : "default",
-            editorTheme : "default",
-            markdown : '',
-            codeFold : true,
-            //syncScrolling : false,
-            saveHTMLToTextarea : true,    // 保存 HTML 到 Textarea
-            searchReplace : true,
-            //watch : false,                // 关闭实时预览
-            htmlDecode : "style,script,iframe|on*",            // 开启 HTML 标签解析，为了安全性，默认不开启
-            //toolbar  : false,             //关闭工具栏
-            //previewCodeHighlight : false, // 关闭预览 HTML 的代码块高亮，默认开启
-            emoji : true,
-            taskList : true,
-            tocm            : true,         // Using [TOCM]
-            tex : true,                   // 开启科学公式TeX语言支持，默认关闭
-            flowChart : true,             // 开启流程图支持，默认关闭
-            sequenceDiagram : true,       // 开启时序/序列图支持，默认关闭,
-            //dialogLockScreen : false,   // 设置弹出层对话框不锁屏，全局通用，默认为true
-            //dialogShowMask : false,     // 设置弹出层对话框显示透明遮罩层，全局通用，默认为true
-            //dialogDraggable : false,    // 设置弹出层对话框不可拖动，全局通用，默认为true
-            //dialogMaskOpacity : 0.4,    // 设置透明遮罩层的透明度，全局通用，默认值为0.1
-            //dialogMaskBgColor : "#000", // 设置透明遮罩层的背景颜色，全局通用，默认为#fff
-            imageUpload : true,
-            imageFormats : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
-            imageUploadURL : "./php/upload.php",
-            onload : function() {
-                //console.log('onload', this);
-                //this.fullscreen();
-                //this.unwatch();
-                //this.watch().fullscreen();
-
-                //this.setMarkdown("#PHP");
-                //this.width("100%");
-                //this.height(480);
-                //this.resize("100%", 640);
-            }
-        });
-
-        $('#save_btn').on('click', function () {
-            var id = $('#id').val();
-            var obj = {
-                "title": $('#title').val(),
-                "content": mdEditor.getMarkdown()
-            };
-
-            if (id) {
-                obj.id = id;
-                update(obj);
-            } else {
-                create(obj);
-            }
-        });
 
         fetchList();
 

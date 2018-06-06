@@ -140,3 +140,12 @@ def xresult(code=0, msg='', data=None):
         'data': data,
         'msg': msg
     }
+
+
+def get_int(values, key, default=0):
+    value = values.get(key)
+    if value:
+        value = int(value)
+    else:
+        value = default
+    return value

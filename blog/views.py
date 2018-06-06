@@ -11,6 +11,10 @@ from smart_pps_service.common.common import md_2_html2
 
 
 @login_required
+def manage(request):
+    return render(request, 'blog/manage.html')
+
+
 def index(request):
     return render(request, 'blog/list.html')
 
