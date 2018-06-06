@@ -26,7 +26,12 @@ def detail(request, id):
         pass
     html5_content = md_2_html2(obj.content)
     return render(request, 'blog/detail.html', {
-        'blog_content': html5_content.replace('<table>', '<table class="table">')
+        'id': obj.id,
+        'title': obj.title,
+        'category': obj.category,
+        'tags': obj.tags.split(','),
+        'upt': obj.upt,
+        'content': html5_content.replace('<table>', '<table class="table table-bordered table-striped">')
     })
 
 

@@ -26,6 +26,8 @@
                     {% csrf_token %}
                     <input type="hidden" id="id">
                     标题：<input type="text" id="title">
+                    分类：<input type="text" id="category">
+                    标签：<input type="text" id="tags">
                     <button type="button" id="save_btn">保存</button>
                     <div id="test-editormd"></div>
                 </aside>
@@ -72,6 +74,8 @@
                 success: function (res) {
                     $('#id').val(id);
                     $('#title').val(res.title);
+                    $('#category').val(res.category);
+                    $('#tags').val(res.tags);
                     mdEditor.setMarkdown(res.content);
 {#                    if (res.code === 0) {#}
 {#                        $('#title').val(res.data.title);#}
@@ -199,6 +203,8 @@
             var id = $('#id').val();
             var obj = {
                 "title": $('#title').val(),
+                "category": $('#category').val(),
+                "tags": $('#tags').val(),
                 "content": mdEditor.getMarkdown()
             };
 
