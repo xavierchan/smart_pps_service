@@ -90,27 +90,46 @@
                 </aside>
                 <aside class="span4 page-sidebar">
                     <section class="widget">
+                        当前搜索：<span id="search">全部</span>&nbsp;&nbsp;<a href="javascript:resetSearch()">重置</a>
+                    </section>
+                    <section class="widget">
                         <div class="quick-links-widget">
-                            <h3 class="title">热门文章</h3>
-                            <ul id="menu-quick-links" class="menu clearfix">
+                            <h3 class="title">分类</h3>
+                            <ul id="category-links" class="menu clearfix">
                                 <li><a href="index-2.html">Home</a></li>
-                                <li><a href="articles-list.html">Articles List</a></li>
-                                <li><a href="faq.html">FAQs</a></li>
-                                <li><a href="contact.html">Contact</a></li>
                             </ul>
                         </div>
                     </section>
                     <section class="widget">
                         <div class="quick-links-widget">
-                            <h3 class="title">最近发布</h3>
-                            <ul id="menu-quick-links" class="menu clearfix">
+                            <h3 class="title">标签</h3>
+                            <ul id="tag-links" class="menu clearfix">
                                 <li><a href="index-2.html">Home</a></li>
-                                <li><a href="articles-list.html">Articles List</a></li>
-                                <li><a href="faq.html">FAQs</a></li>
-                                <li><a href="contact.html">Contact</a></li>
                             </ul>
                         </div>
                     </section>
+{#                    <section class="widget">#}
+{#                        <div class="quick-links-widget">#}
+{#                            <h3 class="title">热门文章</h3>#}
+{#                            <ul id="menu-quick-links" class="menu clearfix">#}
+{#                                <li><a href="index-2.html">Home</a></li>#}
+{#                                <li><a href="articles-list.html">Articles List</a></li>#}
+{#                                <li><a href="faq.html">FAQs</a></li>#}
+{#                                <li><a href="contact.html">Contact</a></li>#}
+{#                            </ul>#}
+{#                        </div>#}
+{#                    </section>#}
+{#                    <section class="widget">#}
+{#                        <div class="quick-links-widget">#}
+{#                            <h3 class="title">最近发布</h3>#}
+{#                            <ul id="menu-quick-links" class="menu clearfix">#}
+{#                                <li><a href="index-2.html">Home</a></li>#}
+{#                                <li><a href="articles-list.html">Articles List</a></li>#}
+{#                                <li><a href="faq.html">FAQs</a></li>#}
+{#                                <li><a href="contact.html">Contact</a></li>#}
+{#                            </ul>#}
+{#                        </div>#}
+{#                    </section>#}
                 </aside>
             </div>
         </div>
@@ -139,15 +158,25 @@
           </div>
         </li>
     </script>
+    <script id="categoryTmpl" type="text/x-jquery-tmpl">
+        <li><a href="javascript:fetchList('?search=${$data}')">${$data}</a></li>
+    </script>
+    <script id="tagTmpl" type="text/x-jquery-tmpl">
+        <li><a href="javascript:fetchList('?search=${$data}')">${$data}</a></li>
+    </script>
     <script>
         function renderList(blogs) {
             $("#list_content").empty();
             $("#blogTmpl").tmpl(blogs).appendTo("#list_content");
         }
 
-        function fetchList() {
+        function fetchList(queryString) {
+            queryString = queryString ? queryString : '';
+            if(queryString) {
+                $('#search').html(queryString);
+            }
             $.ajax({
-                url: '/api/articles',
+                url: '/api/articles' + queryString,
                 type: 'GET',
                 success: function (res) {
                     if (res.code === 0) {
@@ -159,7 +188,49 @@
             });
         }
 
-        fetchList();
+        function resetSearch() {
+            $('#search').html('全部');
+            fetchList();
+        }
+
+        function renderCategorys() {
+            $.ajax({
+                url: '/blogs/categorys',
+                type: 'GET',
+                success: function (res) {
+                    if (res.code === 0) {
+                        $("#category-links").empty();
+                        $("#categoryTmpl").tmpl(res.data).appendTo("#category-links");
+                    } else {
+                        console.log('获取失败');
+                    }
+                }
+            });
+        }
+
+        function renderTags() {
+            $.ajax({
+                url: '/blogs/tags',
+                type: 'GET',
+                success: function (res) {
+                    if (res.code === 0) {
+                        $("#tag-links").empty();
+                        $("#tagTmpl").tmpl(res.data).appendTo("#tag-links");
+                    } else {
+                        console.log('获取失败');
+                    }
+                }
+            });
+        }
+
+
+        function init() {
+            renderCategorys();
+            renderTags();
+            fetchList();
+        }
+
+        init();
 
     </script>
 {% endblock %}
