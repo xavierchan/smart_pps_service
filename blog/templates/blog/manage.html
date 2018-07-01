@@ -240,9 +240,13 @@
             }
         });
 
-        $(document).keydown(function(event){
-            if(event.keyCode == 13){
+        $(document).keydown(function(e) {
+            var keyCode = e.keyCode || e.which || e.charCode;
+            var ctrlKey = e.ctrlKey || e.metaKey;
+            if(ctrlKey && keyCode == 83) {
+                e.preventDefault();
                 $('#save_btn').click();
+                return false;
             }
         });
 
