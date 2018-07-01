@@ -10,7 +10,7 @@ from models import Article
 
 
 class ArticleSerializer(serializers.ModelSerializer):
-    author = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    author = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False)
 
     class Meta:
         model = Article

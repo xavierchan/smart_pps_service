@@ -112,12 +112,17 @@
                 },
                 success: function (res) {
                     fetchList();
+                    layer.msg('更新成功', {icon: 1});
 {#                    if (res.code === 0) {#}
 {#                        fetchList();#}
 {#                        console.log('保存成功');#}
 {#                    } else {#}
 {#                        console.log('获取失败');#}
 {#                    }#}
+                },
+                error: function(res) {
+                    layer.msg('更新失败', {icon: 2});
+                    console.log(res)
                 }
             });
         }
@@ -134,11 +139,16 @@
                 success: function (res) {
                     $('#id').val(res.id);
                     fetchList();
+                    layer.msg('创建成功', {icon: 1});
 {#                    if (res.code === 0) {#}
 {#                        fetchList();#}
 {#                    } else {#}
 {#                        console.log('保存失败');#}
 {#                    }#}
+                },
+                error: function (res) {
+                    layer.msg('更新时报', {icon: 2});
+                    console.log(res)
                 }
             });
         }
@@ -227,6 +237,12 @@
                 update(obj);
             } else {
                 create(obj);
+            }
+        });
+
+        $(document).keydown(function(event){
+            if(event.keyCode == 13){
+                $('#save_btn').click();
             }
         });
 
