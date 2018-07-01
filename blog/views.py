@@ -2,6 +2,8 @@
 from __future__ import unicode_literals
 
 from django.contrib.auth.models import User
+from rest_framework import status
+from rest_framework.response import Response
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
@@ -61,3 +63,12 @@ class ArticleViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter,)
     search_fields = ('=category', 'tags')
     permission_classes = (permissions.IsAuthenticated,)
+
+    def create(self, request, *args, **kwargs):
+        data = request.data
+        data['author'] = request.user
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
