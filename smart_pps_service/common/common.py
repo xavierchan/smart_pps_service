@@ -149,3 +149,31 @@ def get_int(values, key, default=0):
     else:
         value = default
     return value
+
+
+def list_2_tree(raw_nodes, key='id', parent_key='parent_id', child_key='children'):
+    # modified from: https://stackoverflow.com/a/43984479/274549
+
+    # 1. 构造字典
+    nodes = {}
+    for item in raw_nodes:
+        nodes[item[key]] = item
+
+    forest = []
+    # 2. 构建树
+    for item in raw_nodes:
+        if item[parent_key] == -1 or not item[parent_key]:
+            forest.append(item)
+        elif child_key in nodes[item[parent_key]].keys():
+            nodes[item[parent_key]][child_key].append(item)
+        else:
+            nodes[item[parent_key]][child_key] = [item]
+
+    return forest
+
+
+def to_int(value):
+    result = 0
+    if isinstance(value, str) or isinstance(value, int) or isinstance(value, unicode):
+        result = int(value)
+    return result

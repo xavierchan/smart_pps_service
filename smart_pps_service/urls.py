@@ -25,6 +25,7 @@ from finance.views import TradingRecordViewSet
 from wechat.views import LoginView
 from aliyun_oss import views as aliyun_oss_views
 import views
+from django_cas import views as cas_views
 
 
 schema_view = get_swagger_view(title='One Service Rest API')
@@ -43,6 +44,7 @@ urlpatterns = [
     url(r'^login$', views.user_login),
     url(r'^logout$', views.user_logout),
     url(r'^blogs', include('blog.urls')),
+    url(r'^crawler', include('crawler.urls')),
     url(r'^manage$', views.manage),
     url(r'^manage/blogs', blog_views.manage),
     url(r'^manage/aliyun_oss', include('aliyun_oss.urls')),
@@ -59,4 +61,7 @@ urlpatterns = [
     url(r'^oss_media/(?P<fid>[0-9a-zA-Z\-]+)', aliyun_oss_views.read),
     # url(r'^short_link/', include('short_link.urls')),
     url(r'^api/', include(router.urls)),
+    # cas
+    url(r'^cas/login$', cas_views.login, name="cas-login"),
+    url(r'^cas/logout$', cas_views.logout, name="cas-logout"),
 ]

@@ -1,0 +1,170 @@
+{% extends 'common/base.html' %}
+{% load static %}
+{% block content %}
+    <link rel='stylesheet' href="{% static 'css/antd.min.css' %}" type="text/css" />
+
+    <!-- Start of Page Container -->
+    <div class="page-container">
+        <div class="container">
+            <div id="table"></div>
+        </div>
+    </div>
+    <!-- End of Page Container -->
+
+    <script src="{% static 'js/jquery-1.8.3.min.js' %}"></script>
+    <script src="{% static 'js/babel.min.js' %}"></script>
+    <script src="{% static 'js/moment.min.js' %}"></script>
+    <script src="{% static 'js/react.development.js' %}"></script>
+    <script src="{% static 'js/react-dom.development.js' %}"></script>
+    <script src="{% static 'js/antd.min.js' %}"></script>
+    <script type="text/babel">
+        class EmailLogsTable extends React.Component {
+
+          state = {
+              process: 0,
+              statistics: {},
+              loading: false,
+              data: [],
+              pagination: {
+                  'current': 1,
+                  'pageSize': 20,
+                  'total': 0
+              },
+              columns: [
+                {
+                  title: 'ID',
+                  dataIndex: '_id',
+                },
+                {
+                  title: '状态',
+                  dataIndex: 'status',
+                    render: (text, record) => {
+                      return record.status == 1 ? (<antd.Icon type="check-circle" />) : (<antd.Icon type="close-circle" />)
+                    }
+                },
+                {
+                  title: '发送时间',
+                  dataIndex: 'send_time',
+                },
+                {
+                  title: '发送邮箱',
+                  dataIndex: 'sender',
+                },
+                  {
+                      title: '接收邮箱',
+                      dataIndex: 'receiver',
+                  },
+                {
+                  title: '详情',
+                  dataIndex: 'detail',
+                }
+              ],
+          };
+
+          constructor(props) {
+            super(props);
+          }
+
+          componentDidMount() {
+              this.getStatistics();
+              this.getLogs(this.state.pagination);
+              window.setInterval(this.getStatistics, 1000);
+          }
+
+          getStatistics = () => {
+            $.ajax({
+              type: "get",
+              url: '/crawler/get_statistics',
+              success:(res)=>{
+                this.setState({
+                    process: res.data.success / 500000,
+                    statistics: res.data,
+                    speed: res.data.config.speed / 60
+                });
+              }
+            })
+          };
+
+          flush = () => {
+            this.getStatistics();
+            this.getLogs(this.state.pagination)
+          };
+
+          getLogs = (params) => {
+              this.setState({ loading: true });
+              let searchStatus = this.state.status ? '&status=' + this.state.status : '';
+            $.ajax({
+              type: "get",
+              url: '/crawler/get_email_logs?page=' + params.current + '&page_size=' + params.pageSize + searchStatus,
+              success:(res)=>{
+                  const pagination = { ...this.state.pagination };
+                  pagination.total = res.data.total;
+                  this.setState({
+                      loading: false,
+                      data: res.data.list,
+                      pagination,
+                  });
+              },
+                error: () => {
+                  this.setState({
+                      loading: false});
+                }
+            })
+          };
+
+          handleTableChange = (pagination, filters, sorter) => {
+            const pager = { ...this.state.pagination };
+            pager.current = pagination.current;
+            this.setState({
+              pagination: pager,
+            });
+            this.getLogs({
+              pageSize: pagination.pageSize,
+              current: pagination.current,
+            });
+          };
+
+          handleChange = (value) => {
+              this.setState({
+                  status: value
+              });
+          };
+
+
+          render() {
+            return (
+                <div>
+                    <antd.Card>
+                        <antd.Progress type="dashboard" percent={this.state.process} />
+                        <p>已经发送：{this.state.statistics.total}</p>
+                        <p>发送成功：{this.state.statistics.success}</p>
+                        <p>发送失败：{this.state.statistics.faile}</p>
+                        <p>发送速度：{this.state.speed}封/s</p>
+                        <antd.Select defaultValue="" onChange={this.handleChange}>
+                          <antd.Select.Option value="">全部</antd.Select.Option>
+                          <antd.Select.Option value="1">成功</antd.Select.Option>
+                          <antd.Select.Option value="0">失败</antd.Select.Option>
+                        </antd.Select>
+                        <antd.Button type="primary" shape="circle" icon="search" onClick={this.flush}></antd.Button>
+                    </antd.Card>
+                    <antd.Table
+                        size="small"
+                        columns={this.state.columns}
+                        rowKey={record => record._id}
+                        dataSource={this.state.data}
+                        pagination={this.state.pagination}
+                        loading={this.state.loading}
+                        onChange={this.handleTableChange}
+                    />
+                </div>
+
+            )
+          }
+        }
+
+        ReactDOM.render(
+            <EmailLogsTable/>
+          ,document.getElementById('table')
+        );
+    </script>
+{% endblock %}

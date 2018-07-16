@@ -3,18 +3,22 @@ from __future__ import unicode_literals
 
 import datetime
 import urllib2
+import json
 from urllib import urlencode
 
 from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST, require_GET
 from django.shortcuts import render
 from django.http.response import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from pymongo import MongoClient
+import pymongo
 from bs4 import BeautifulSoup
 
+from common.email_sender import EmailSendUtil
 from utils import get_as_cp
+from smart_pps_service.common.common import xresult, to_int
 
 MONGODB_SETTINGS = settings.MONGODB
 client = MongoClient(
@@ -119,3 +123,67 @@ def sett(request):
         'mem': dict(zip(result[0], result[1])),
         'swap': dict(zip(result[0], result[2])),
     })
+
+
+def send_email(request):
+    util = EmailSendUtil(host='smtp.163.com', port=25)
+    from_infos = {
+        'addr': 'xavierchan@163.com',
+        'alias': 'xavierchan',
+        'password': 'CZX521lsx'
+    }
+    to_infos = {
+        'addr': 'zx.chen@eliteu.com.cn',
+        'alias': 'zx.chen@eliteu'
+    }
+    email_contents = {
+        'subject': 'hello',
+        'content': 'hello world'
+    }
+    util.send_email(from_infos, to_infos, email_contents)
+
+
+@login_required
+def email_logs(request):
+    return render(request, 'crawler/email_logs.html')
+
+
+@require_GET
+@login_required
+def get_email_logs(request):
+    page = to_int(request.GET.get('page', 1))
+    page_size = to_int(request.GET.get('page_size', 20))
+    status = request.GET.get('status')
+
+    collection = client['waste_email']['logs']
+    query = {} if not status else { 'status': int(status) }
+
+    email_logs = list(collection.find(query).sort('send_time', pymongo.DESCENDING).skip((page - 1) * page_size).limit(page_size))
+    for item in email_logs:
+        item['_id'] = str(item['_id'])
+        item['send_time'] = str(item['send_time']).split('.')[0]
+
+    return HttpResponse(json.dumps(xresult(data={
+        'list': email_logs,
+        'total': collection.count()
+    })), content_type='application/json')
+
+
+@require_GET
+@login_required
+def get_statistics(request):
+    collection = client['waste_email']['logs']
+
+    success = collection.count({'status': 1})
+    faile = collection.count({'status': 0})
+
+    cfg_collection = client['waste_email']['configs']
+    cfg = cfg_collection.find_one()
+    cfg['_id'] = str(cfg['_id'])
+
+    return HttpResponse(json.dumps(xresult(data={
+        'total': success + faile,
+        'success': success,
+        'faile': faile,
+        'config': cfg
+    })), content_type='application/json')

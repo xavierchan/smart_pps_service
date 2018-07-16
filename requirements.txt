@@ -11,3 +11,5 @@ markdown==2.6.9
 raven==6.4.0
 django-redis==4.9.0
 beautifulsoup4==4.6.0
+django_mama_cas==2.3.0
+django-crontab==0.7.1

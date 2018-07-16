@@ -42,6 +42,8 @@ DJANGO_APPS = [
     'rest_framework',
     'rest_framework_swagger',
     'raven.contrib.django.raven_compat',
+    'django_cas',
+    'django_crontab',
 ]
 
 LOCAL_APPS = [
@@ -54,6 +56,10 @@ LOCAL_APPS = [
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS;
+
+CRONJOBS = [
+    ('* * * * *', 'crawler.cron.send_email')
+]
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
@@ -103,6 +109,16 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+MIDDLEWARE_CLASS = [
+    'django_cas.middleware.CASMiddleware',
+]
+
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'django_cas.backends.CASBackend',
+)
 
 ROOT_URLCONF = 'smart_pps_service.urls'
 
@@ -196,3 +212,5 @@ LOGIN_URL = '/login'
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+# CAS_SERVER_URL = 'http://127.0.0.1:8340/cas/'
