@@ -143,7 +143,7 @@
               <img class="  img-blur-done" src="//upload-images.jianshu.io/upload_images/3343569-4bcf991e16d299a1?imageMogr2/auto-orient/strip|imageView2/1/w/300/h/240" alt="120">
             </a>
           <div class="content">
-            <a class="title" href="/blogs/${id}">${title}</a>
+            <a class="title" href="/${id}">${title}</a>
             <p class="abstract">
               随处可见的长江大桥 全国的城市里，只有重庆的长江大桥最多，建好的有36座。重庆是个两江环绕的山城，桥担负着行车、行人、行轻轨的重担。 长江上总共...
             </p>
@@ -195,7 +195,7 @@
 
         function renderCategorys() {
             $.ajax({
-                url: '/blogs/categorys',
+                url: '/categorys',
                 type: 'GET',
                 success: function (res) {
                     if (res.code === 0) {
@@ -210,7 +210,7 @@
 
         function renderTags() {
             $.ajax({
-                url: '/blogs/tags',
+                url: 'tags',
                 type: 'GET',
                 success: function (res) {
                     if (res.code === 0) {

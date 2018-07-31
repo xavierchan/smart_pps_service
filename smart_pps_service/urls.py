@@ -43,6 +43,7 @@ urlpatterns = [
     url(r'^$', views.index),
     url(r'^login$', views.user_login),
     url(r'^logout$', views.user_logout),
+    url(r'^blog', include('blog.urls')),
     url(r'^blogs', include('blog.urls')),
     url(r'^crawler', include('crawler.urls')),
     url(r'^manage$', views.manage),

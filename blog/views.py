@@ -62,11 +62,10 @@ class ArticleViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ArticleSerializer
     filter_backends = (filters.SearchFilter,)
     search_fields = ('=category', 'tags')
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.AllowAny,)
 
     def create(self, request, *args, **kwargs):
         data = request.data
-        data['author'] = request.user.id
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
