@@ -1,0 +1,39 @@
+{% extends 'common/base.html' %}
+{% load static %}
+{% block content %}
+    <li>
+        <div class="card" style="width:300px">
+               
+            <div class="card-body">
+                      <h4 class="card-title">Jane Doe</h4>
+                      <p class="card-text">Some example text some example text. Jane Doe is an architect and
+                engineer</p>
+                      <a href="#" class="btn btn-primary">See Profile</a>
+                   
+            </div>
+                <img class="card-img-bottom" src="http://static.runoob.com/images/mix/img_avatar.png" alt="Card image"
+                     style="width:100%">
+             
+        </div>
+
+        </div>
+    </li>
+
+    <script>
+        function renderGames() {
+            $.ajax({
+                url: '{% url "blog_categorys" %}',
+                type: 'GET',
+                success: function (res) {
+                    if (res.code === 0) {
+                        $("#category-links").empty();
+                        $("#categoryTmpl").tmpl(res.data).appendTo("#category-links");
+                    } else {
+                        console.log('获取失败');
+                    }
+                }
+            });
+        }
+    </script>
+
+{% endblock %}

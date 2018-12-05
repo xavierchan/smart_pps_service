@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.contrib.auth.models import User
 from rest_framework import status
 from rest_framework.response import Response
 from django.contrib.auth.decorators import login_required
@@ -11,10 +10,17 @@ from smart_pps_service.common import viewsets
 from rest_framework import permissions
 import serializers
 from models import Article
-from django.http.response import JsonResponse
 from rest_framework import filters
+from django.http.response import JsonResponse
+from tasks import increate_pv
+import datetime
+datetime.timedelta(hours=1)
 
 from smart_pps_service.common.common import md_2_html2, xresult
+
+
+def index(request):
+    return render(request, 'blog/index.html')
 
 
 @login_required
@@ -22,13 +28,10 @@ def manage(request):
     return render(request, 'blog/manage.html')
 
 
-def index(request):
-    return render(request, 'blog/list.html')
-
-
 def detail(request, id):
     try:
         obj = Article.objects.get(id=id)
+        increate_pv(id)
     except Exception as e:
         pass
     html5_content = md_2_html2(obj.content)
@@ -37,6 +40,7 @@ def detail(request, id):
         'title': obj.title,
         'category': obj.category,
         'tags': obj.tags.split(','),
+        'pv': obj.pv,
         'upt': obj.upt,
         'content': html5_content.replace('<table>', '<table class="table table-bordered table-striped">')
     })
@@ -58,7 +62,7 @@ def get_tags(request):
 
 class ArticleViewSet(viewsets.ModelViewSet):
 
-    queryset = Article.objects.all()
+    queryset = Article.objects.filter(is_published=True)
     serializer_class = serializers.ArticleSerializer
     filter_backends = (filters.SearchFilter,)
     search_fields = ('=category', 'tags')
@@ -66,6 +70,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         data = request.data
+        data['author'] = request.user.id
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)

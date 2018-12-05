@@ -34,11 +34,13 @@
                     <div class="col-md-12">
                         <label>Login with: </label>
                         <div class="inline-block">
-                            <a href="#"><i class="fa fa-facebook-square login-with"></i></a>
-                            <a href="#"><i class="fa fa-twitter-square login-with"></i></a>
-                            <a href="#"><i class="fa fa-google-plus-square login-with"></i></a>
-                            <a href="#"><i class="fa fa-tumblr-square login-with"></i></a>
-                            <a href="#"><i class="fa fa-github-square login-with"></i></a>
+                            <a href="{% url "social:begin" "facebook" %}"><i class="fa fa-facebook login-with"></i></a>
+                            <a href="{% url "social:begin" "twitter" %}"><i class="fa fa-twitter login-with"></i></a>
+                            <a href="{% url "social:begin" "google-oauth2" %}"><i class="fa fa-google-plus login-with"></i></a>
+                            <a href="{% url "social:begin" "github" %}"><i class="fa fa-github login-with"></i></a>
+                            <a href="{% url "social:begin" "weixin" %}"><i class="fa fa-wechat login-with"></i></a>
+                            <a href="{% url "social:begin" "weibo" %}"><i class="fa fa-weibo login-with"></i></a>
+                            <a href="{% url "social:begin" "qq" %}"><i class="fa fa-qq login-with"></i></a>
                         </div>
                     </div>
                 </div>

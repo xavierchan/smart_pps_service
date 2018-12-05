@@ -12,6 +12,9 @@ class Article(models.Model):
     tags = models.CharField(max_length=20, blank=True, verbose_name='标签')
     is_published = models.BooleanField(default=False, verbose_name='是否发布')
     author = models.ForeignKey(User, verbose_name='作者')
+    pv = models.IntegerField(verbose_name='pv', default=0)
+    uv = models.IntegerField(verbose_name='uv', default=0)
+    is_spread = models.BooleanField(verbose_name='是否推广', default=False)
     crt = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
     upt = models.DateTimeField(auto_now=True, verbose_name='更新时间')
 

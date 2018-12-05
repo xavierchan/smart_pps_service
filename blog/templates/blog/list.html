@@ -2,76 +2,86 @@
 {% load static %}
 {% block content %}
 
-    <style>
-        .note-list {
-            margin: 0;
-            padding: 0;
-            list-style: none;
-        }
-
-        .note-list li.have-img {
-            min-height: 140px;
-        }
-
-        .note-list li {
-            position: relative;
-            width: 100%;
-            margin: 0 0 15px;
-            padding-right: 2px;
-            border-bottom: 1px solid #f0f0f0;
-            word-wrap: break-word;
-        }
-
-        .note-list .have-img>div {
-            padding-right: 140px;
-        }
-
-        .title {
-            font-family: -apple-system,SF UI Display,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif;
-        }
-
-        .note-list .have-img .wrap-img {
-            position: absolute;
-            top: 50%;
-            margin-top: -60px;
-            right: 0;
-            width: 125px;
-            height: 100px;
-        }
-
-        .note-list .title {
-            margin: -7px 0 4px;
-            display: inherit;
-            font-size: 18px;
-            font-weight: 700;
-            line-height: 1.5;
-        }
-
-        img {
-            vertical-align: middle;
-        }
-
-        div {
-            display: block;
-        }
-
-        li {
-            line-height: 20px;
-            display: list-item;
-            text-align: -webkit-match-parent;
-        }
-    </style>
+{#    <style>#}
+{#        .note-list {#}
+{#            margin: 0;#}
+{#            padding: 0;#}
+{#            list-style: none;#}
+{#        }#}
+{##}
+{#        .note-list li.have-img {#}
+{#            min-height: 140px;#}
+{#        }#}
+{##}
+{#        .note-list li {#}
+{#            position: relative;#}
+{#            width: 100%;#}
+{#            margin: 0 0 15px;#}
+{#            padding-right: 2px;#}
+{#            border-bottom: 1px solid #f0f0f0;#}
+{#            word-wrap: break-word;#}
+{#        }#}
+{##}
+{#        .note-list .have-img>div {#}
+{#            padding-right: 140px;#}
+{#        }#}
+{##}
+{#        .title {#}
+{#            font-family: -apple-system,SF UI Display,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif;#}
+{#        }#}
+{##}
+{#        .note-list .have-img .wrap-img {#}
+{#            position: absolute;#}
+{#            top: 50%;#}
+{#            margin-top: -60px;#}
+{#            right: 0;#}
+{#            width: 125px;#}
+{#            height: 100px;#}
+{#        }#}
+{##}
+{#        .note-list .title {#}
+{#            margin: -7px 0 4px;#}
+{#            display: inherit;#}
+{#            font-size: 18px;#}
+{#            font-weight: 700;#}
+{#            line-height: 1.5;#}
+{#        }#}
+{##}
+{#        img {#}
+{#            vertical-align: middle;#}
+{#        }#}
+{##}
+{#        div {#}
+{#            display: block;#}
+{#        }#}
+{##}
+{#        li {#}
+{#            line-height: 20px;#}
+{#            display: list-item;#}
+{#            text-align: -webkit-match-parent;#}
+{#        }#}
+{#    </style>#}
     <!-- Start of Page Container -->
+    <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+      <!-- Navbar content -->
+    </nav>
     <div class="page-container">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">Library</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Data</li>
+          </ol>
+        </nav>
         <div class="container">
             <div class="row">
                 <!-- start of page content -->
                 <aside class="span8 page-sidebar">
                     <ul class="note-list" id="list_content">
                         <li id="note-28491853" data-note-id="28491853" class="have-img">
-                            <a class="wrap-img" href="/p/3b4b5ac2ea68" target="_blank">
-                              <img class="  img-blur-done" src="//upload-images.jianshu.io/upload_images/3343569-4bcf991e16d299a1?imageMogr2/auto-orient/strip|imageView2/1/w/300/h/240" alt="120">
-                            </a>
+{#                            <a class="wrap-img" href="/p/3b4b5ac2ea68" target="_blank">#}
+{#                              <img class="  img-blur-done" src="//upload-images.jianshu.io/upload_images/3343569-4bcf991e16d299a1?imageMogr2/auto-orient/strip|imageView2/1/w/300/h/240" alt="120">#}
+{#                            </a>#}
                           <div class="content">
                             <a class="title" target="_blank" href="/p/3b4b5ac2ea68">山城重庆 | 桥上之城的都市风光</a>
                             <p class="abstract">
@@ -87,25 +97,40 @@
                           </div>
                         </li>
                     </ul>
+                    <nav aria-label="Page navigation example">
+                      <ul class="pagination">
+                        <li class="page-item">
+                          <a class="page-link" href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only">Previous</span>
+                          </a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                          <a class="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">Next</span>
+                          </a>
+                        </li>
+                      </ul>
+                    </nav>
                 </aside>
                 <aside class="span4 page-sidebar">
                     <section class="widget">
                         当前搜索：<span id="search">全部</span>&nbsp;&nbsp;<a href="javascript:resetSearch()">重置</a>
                     </section>
                     <section class="widget">
-                        <div class="quick-links-widget">
-                            <h3 class="title">分类</h3>
-                            <ul id="category-links" class="menu clearfix">
-                                <li><a href="index-2.html">Home</a></li>
-                            </ul>
+                        <h3 class="title">分类</h3>
+                        <div class="tagcloud" id="category-links">
+                            <a href="#" class="btn btn-mini">basic</a>
                         </div>
                     </section>
                     <section class="widget">
-                        <div class="quick-links-widget">
-                            <h3 class="title">标签</h3>
-                            <ul id="tag-links" class="menu clearfix">
-                                <li><a href="index-2.html">Home</a></li>
-                            </ul>
+                        <h3 class="title">Tags</h3>
+                        <div class="tagcloud" id="tag-links">
+                            <a href="#" class="btn btn-mini">basic</a>
                         </div>
                     </section>
 {#                    <section class="widget">#}
@@ -139,9 +164,9 @@
     <script src="{% static 'js/jquery.tmpl.js' %}"></script>
     <script id="blogTmpl" type="text/x-jquery-tmpl">
         <li id="note-28491853" data-note-id="28491853" class="have-img">
-            <a class="wrap-img" href="/p/3b4b5ac2ea68" target="_blank">
-              <img class="  img-blur-done" src="//upload-images.jianshu.io/upload_images/3343569-4bcf991e16d299a1?imageMogr2/auto-orient/strip|imageView2/1/w/300/h/240" alt="120">
-            </a>
+{#            <a class="wrap-img" href="/p/3b4b5ac2ea68" target="_blank">#}
+{#              <img class="  img-blur-done" src="//upload-images.jianshu.io/upload_images/3343569-4bcf991e16d299a1?imageMogr2/auto-orient/strip|imageView2/1/w/300/h/240" alt="120">#}
+{#            </a>#}
           <div class="content">
             <a class="title" href="/${id}">${title}</a>
             <p class="abstract">
@@ -159,10 +184,12 @@
         </li>
     </script>
     <script id="categoryTmpl" type="text/x-jquery-tmpl">
-        <li><a href="javascript:fetchList('?search=${$data}')">${$data}</a></li>
+        <a href="javascript:selTag(this, '?search=${$data}')" class="btn btn-mini">${$data}</a>
+{#        <li><a href="javascript:fetchList('?search=${$data}')">${$data}</a></li>#}
     </script>
     <script id="tagTmpl" type="text/x-jquery-tmpl">
-        <li><a href="javascript:fetchList('?search=${$data}')">${$data}</a></li>
+        <a onclick="selTag(this, '?search=${$data}')" class="btn btn-mini">${$data}</a>
+{#        <li><a href="javascript:fetchList('?search=${$data}')">${$data}</a></li>#}
     </script>
     <script>
         function renderList(blogs) {
@@ -186,6 +213,18 @@
                     }
                 }
             });
+        }
+
+        function selTag(ele, queryString) {
+            // 清除其他选中，并设置当前选中
+            $('#tag-links>a').removeClass('active');
+            if(queryString != $('#search').html()) {
+                $(ele).addClass('active');
+            } else {
+                queryString = '';
+                $('#search').html('全部');
+            }
+            fetchList(queryString)
         }
 
         function resetSearch() {

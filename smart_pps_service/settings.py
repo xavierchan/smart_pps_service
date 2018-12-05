@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 import datetime
 from env import *
+import djcelery
+djcelery.setup_loader()
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -35,6 +38,7 @@ APPEND_SLASH = False
 DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
+    'django.contrib.sites',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -42,8 +46,15 @@ DJANGO_APPS = [
     'rest_framework',
     'rest_framework_swagger',
     'raven.contrib.django.raven_compat',
-    'django_cas',
-    'django_crontab',
+    'djcelery',
+    'social_django',
+    'notifications',
+    'actstream',
+    #'channels',
+    # 'account',
+    'analytical',
+    #'robots',
+    'comic',
 ]
 
 LOCAL_APPS = [
@@ -53,13 +64,11 @@ LOCAL_APPS = [
     'aliyun_oss',
     'blog',
     'crawler',
+    'game',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS;
 
-CRONJOBS = [
-    ('* * * * *', 'crawler.cron.send_email')
-]
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
@@ -97,9 +106,6 @@ JWT_AUTH = {
     'JWT_ALLOW_REFRESH': True,
 }
 
-CELERY_BROKER_URL = 'amqp://guest:guest@127.0.0.1:5672//'
-CELERY_RESULT_BACKEND = 'redis://{host}:{port}/0'.format(host=REDIS.get('HOST'), port=REDIS.get('PORT'))
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -110,14 +116,23 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-MIDDLEWARE_CLASS = [
-    'django_cas.middleware.CASMiddleware',
+MIDDLEWARE_CLASSES = [
+    "account.middleware.LocaleMiddleware",
+    "account.middleware.TimezoneMiddleware",
 ]
 
 
 AUTHENTICATION_BACKENDS = (
+    'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.yahoo.YahooOAuth2',
+    'social_core.backends.github.GithubOAuth2',
+    'social_core.backends.twitter.TwitterOAuth',
+    'social_core.backends.facebook.FacebookOAuth2',
+    'social_core.backends.weixin.WeixinOAuth2',
+    'social_core.backends.weibo.WeiboOAuth2',
+    'social_core.backends.qq.QQOAuth2',
+    'social_core.backends.douban.DoubanOAuth2',
     'django.contrib.auth.backends.ModelBackend',
-    'django_cas.backends.CASBackend',
 )
 
 ROOT_URLCONF = 'smart_pps_service.urls'
@@ -137,6 +152,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -148,28 +165,30 @@ WSGI_APPLICATION = 'smart_pps_service.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
-DATABASES = {
-    'default': {
-        "ENGINE": "django.db.backends.mysql",
-        "HOST": MYSQL.get('HOST'),
-        "PORT": MYSQL.get('PORT'),
-        "NAME": MYSQL.get('NAME'),
-        "USER": MYSQL.get('USER'),
-        "PASSWORD": MYSQL.get('PASSWORD'),
-        'OPTIONS': {
-            'charset': 'utf8mb4',
-            'init_command': 'SET default_storage_engine=INNODB',
+if False:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
+            "ENGINE": "django.db.backends.mysql",
+            "HOST": MYSQL.get('HOST'),
+            "PORT": MYSQL.get('PORT'),
+            "NAME": MYSQL.get('NAME'),
+            "USER": MYSQL.get('USER'),
+            "PASSWORD": MYSQL.get('PASSWORD'),
+            'OPTIONS': {
+                'charset': 'utf8mb4',
+                'init_command': 'SET default_storage_engine=INNODB',
+            },
+            'TEST_CHARSET': 'utf8',
+            'TEST_COLLATION': 'utf8_general_ci'
         },
-        'TEST_CHARSET': 'utf8',
-        'TEST_COLLATION': 'utf8_general_ci'
-    },
-}
+    }
 
 
 # Password validation
@@ -199,12 +218,15 @@ LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 LOGIN_URL = '/login'
+
+SITE_ID = 1
+
+FMT_DATETIME = "%Y-%m-%d %H:%M:%S"
+FMT_DATE = "%Y-%m-%d"
 
 
 # Static files (CSS, JavaScript, Images)
@@ -213,4 +235,15 @@ LOGIN_URL = '/login'
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-# CAS_SERVER_URL = 'http://127.0.0.1:8340/cas/'
+CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_RESULT_BACKEND = 'djcelery.backends.database:DatabaseBackend'
+
+TEMPLATE_CONTEXT_PROCESSORS = [
+    "account.context_processors.account",
+]
+
+SOCIAL_AUTH_GITHUB_KEY = 'dc0df6a5de9d855a7cdd'
+SOCIAL_AUTH_GITHUB_SECRET = 'f6d66b3d1b51c097cc4d4c862faeac7ec9fa1880'

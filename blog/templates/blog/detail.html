@@ -15,7 +15,7 @@
                             {{ tag }}
                         {% endfor %}
                         </p>
-                    <p>更新时间：{{ upt | date:"Y-m-d H:i:s" }} 浏览次数：1</p>
+                    <p>更新时间：{{ upt | date:"Y-m-d" }} 浏览次数：{{ pv }}</p>
                 </aside>
             </div>
             <div class="row">
@@ -30,8 +30,6 @@
             <div class="row">
                 <aside class="span12 page-sidebar">
                     <h1>留言</h1>
-                    更新时间：{{ upt | date:"Y-m-d H:i:s" }}
-                    浏览次数：1
                 </aside>
             </div>
         </div>

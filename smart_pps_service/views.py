@@ -10,10 +10,16 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 
 from smart_pps_service.common.common import xresult
+from blog.models import Article
 
 
 def index(request):
-    return render(request, 'home.html')
+    num = 5
+    spead_articles = Article.objects.filter(is_published=True, is_spread=True).order_by('crt')
+    latest = spead_articles[:num].only('id', 'title', 'upt', 'pv')
+    return render(request, 'home.html', {
+        'latest_articles': latest
+    })
 
 
 @csrf_exempt
@@ -38,7 +44,7 @@ def user_login(request):
             response = xresult(msg='login success', data='/')
         except Exception as ex:
             response = xresult(code=-1)
-        
+
         return JsonResponse(response)
 
     return render(request, 'login.html')
