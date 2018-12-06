@@ -19,7 +19,14 @@
                 </ul>
             </li>
             <li><a href="/blog/" >博客</a></li>
-            <li><a href="/game/" >游戏</a></li>
+        <li>
+                <a href="#">娱乐</a>
+                <ul class="sub-menu" style="z-index: 999">
+                    <li><a href="/game/" >游戏</a></li>
+                    <li><a href="/comic/">漫画</a></li>
+                    <li><a href="/plan/shop">视频</a></li>
+                </ul>
+            </li>
             <li><a href="http://github.com/xavierchan" target="_blank" >GitHub</a></li>
             <li><a href="/about">关于我</a></li>
             {% if user.is_authenticated %}

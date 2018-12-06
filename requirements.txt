@@ -1,4 +1,4 @@
-django==1.11.0
+django==1.11.15
 djangorestframework==3.7.3
 djangorestframework-jwt==1.11.0
 django-rest-swagger==2.1.2
@@ -10,10 +10,11 @@ markdown==2.6.9
 raven==6.4.0
 django-redis==4.9.0
 beautifulsoup4==4.6.0
-django-celery==3.1.26
+django-celery==3.2.2
 django-notifications-hq==1.5.0
 django-activity-stream==0.6.5
 django-social-auth==0.7.28
 django-user-accounts==2.0.3
 django-analytical==2.5.0
 service-identity==17.0.0
+django-mdeditor-0.1.8

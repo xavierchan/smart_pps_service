@@ -88,25 +88,23 @@
                           </div>
                         </li>
                     </ul>
-                    <nav aria-label="Page navigation example">
-                      <ul class="pagination">
-                        <li class="page-item">
-                          <a class="page-link" href="#" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                            <span class="sr-only">Previous</span>
-                          </a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                          <a class="page-link" href="#" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                            <span class="sr-only">Next</span>
-                          </a>
-                        </li>
-                      </ul>
-                    </nav>
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination">
+                          <li>
+                            <a href="#" aria-label="Previous">
+                              <span aria-hidden="true">&laquo;</span>
+                            </a>
+                          </li>
+                          <li><a href="#" class="active">1</a></li>
+                          <li><a href="#">2</a></li>
+                          <li><a href="#">3</a></li>
+                          <li>
+                            <a href="#" aria-label="Next">
+                              <span aria-hidden="true">&raquo;</span>
+                            </a>
+                          </li>
+                        </ul>
+                      </nav>
                 </aside>
                 <aside class="span4 page-sidebar">
                     <section class="widget">
@@ -119,7 +117,7 @@
                         </div>
                     </section>
                     <section class="widget">
-                        <h3 class="title">Tags</h3>
+                        <h3 class="title">标签</h3>
                         <div class="tagcloud" id="tag-links">
                             <a href="#" class="btn btn-mini">basic</a>
                         </div>
@@ -162,20 +160,54 @@
             <a class="title" href="/blog/${id}/">${title}</a>
             <p class="abstract">${content}</p>
             <div class="meta">
-                <p>作者：${author_name}  ${pv} 浏览 最新修改：${upt} </p>
+                <p>作者：${author_name} 浏览 ${pv} 最新修改：${upt} </p>
             </div>
           </div>
         </li>
     </script>
     <script id="categoryTmpl" type="text/x-jquery-tmpl">
-        <a href="javascript:selTag(this, '?search=${$data}')" class="btn btn-mini">${$data}</a>
+        <a href="javascript:selTag(this, 'search=${$data}')" class="btn btn-mini">${$data}</a>
         {#<li><a href="javascript:fetchList('?search=${$data}')">${$data}</a></li>#}
     </script>
     <script id="tagTmpl" type="text/x-jquery-tmpl">
-        <a onclick="selTag(this, '?search=${$data}')" class="btn btn-mini">${$data}</a>
+        <a onclick="selTag(this, 'search=${$data}')" class="btn btn-mini">${$data}</a>
 {#        <li><a href="javascript:fetchList('?search=${$data}')">${$data}</a></li>#}
     </script>
     <script>
+        String.prototype.format = function(args) {
+            var result = this;
+            if (arguments.length > 0) {
+                if (arguments.length == 1 && typeof (args) == "object") {
+                    for (var key in args) {
+                        if(args[key]!=undefined){
+                            var reg = new RegExp("({" + key + "})", "g");
+                            result = result.replace(reg, args[key]);
+                        }
+                    }
+                }
+                else {
+                    for (var i = 0; i < arguments.length; i++) {
+                        if (arguments[i] != undefined) {
+                            var reg= new RegExp("({)" + i + "(})", "g");
+                            result = result.replace(reg, arguments[i]);
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+    </script>
+    <script>
+        var page = 1;
+        var size = 10;
+
+        $('.pagination li a').on('click', function(e) {
+            $('.pagination li a').removeClass('active');
+            $(e.target).addClass('active');
+            page = Number(e.target.text);
+            fetchList();
+        });
+
         function renderList(blogs) {
             $("#list_content").empty();
             $("#blogTmpl").tmpl(blogs).appendTo("#list_content");
@@ -183,18 +215,20 @@
 
         function fetchList(queryString) {
             queryString = queryString ? queryString : '';
+            var pagerString = '?page={page}&size={size}'.format({page: page, size: size});
             if(queryString) {
                 $('#search').html(queryString);
             }
             $.ajax({
-                url: '/api/articles' + queryString,
+                url: '/api/articles' + pagerString + '&' + queryString,
                 type: 'GET',
                 success: function (res) {
-                    if (res.code === 0) {
-                        renderList(res.data);
-                    } else {
-                        console.log('获取失败');
-                    }
+                    renderList(res.results);
+                    //if (res.code === 0) {
+                    //    renderList(res.data);
+                    //} else {
+                    //    console.log('获取失败');
+                    //}
                 }
             });
         }

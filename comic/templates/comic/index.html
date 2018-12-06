@@ -14,15 +14,16 @@
     {% verbatim %}
     <div id="app" style="width: 1070px; margin: 0 auto; padding-top: 20px; padding-bottom: 20px;">
         <el-row :gutter="20">
-            <el-col :span="6" v-for="game in games" class="game-item">
+            <el-col :span="6" v-for="comic in comics" :key="comic.id" class="game-item">
                 <div class="grid-content bg-purple">
                     <el-card :body-style="{ padding: '0px' }">
-                        <img src="http://static.runoob.com/images/mix/img_avatar.png" class="image">
+                        <img v-bind:src="comic.cover" class="image">
                         <div style="padding: 14px;">
-                            <span>{{ game.name }}</span>
+                            <span>{{ comic.name }}</span>
+                            <span>{{ comic.intro }}</span>
                             <div class="bottom clearfix">
-                                <time class="time">{{ currentDate }}</time>
-                                <el-button type="text" class="button">开始游戏</el-button>
+                                <time class="time">{{ comic.upt }}</time>
+                                <el-button type="text" class="button"><a v-bind:href="'/comic/'+comic.id">开始阅读</a></el-button>
                             </div>
                         </div>
                     </el-card>
@@ -37,18 +38,18 @@
             data: function () {
                 return {
                     visible: false,
-                    games: []
+                    comics: []
                 }
             },
             created: function () {
-                this.fetchGames();
+                this.fetchComics();
             },
             methods:{
-            fetchGames: function() {
+            fetchComics: function() {
                 var _self = this;
                 //发送get请求
-                this.$http.get('/api/games').then(function(res) {
-                    _self.games = res.data.results;
+                this.$http.get('/api/comics').then(function(res) {
+                    _self.comics = res.data.results;
                 },function(){
                     console.log('请求失败处理');
                 });

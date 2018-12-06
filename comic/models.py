@@ -20,6 +20,9 @@ class Comic(TimestampModel):
     author = models.CharField(verbose_name='作者', max_length=50, null=True)
     type = models.IntegerField(verbose_name='类型', default=0)
 
+    def __str__(self):
+        return self.name.encode('utf-8')
+
     class Meta:
         verbose_name_plural = verbose_name = '漫画'
 

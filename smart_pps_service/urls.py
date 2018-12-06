@@ -21,6 +21,8 @@ from rest_framework_swagger.views import get_swagger_view
 from member.views import UserViewSet, OrganizationViewSet, GroupViewSet
 from pps.views import ProductViewSet, OrderViewSet
 from blog import views as blog_views
+from game.views import GameViewSet
+from comic.views import ComicViewSet
 from finance.views import TradingRecordViewSet
 from wechat.views import LoginView
 from aliyun_oss import views as aliyun_oss_views
@@ -36,6 +38,8 @@ router.register(r'users', UserViewSet, 'users')
 router.register(r'products', ProductViewSet, 'products')
 router.register(r'orders', OrderViewSet, 'orders')
 router.register(r'trading_records', TradingRecordViewSet, 'trading_records')
+router.register(r'games', GameViewSet, 'games')
+router.register(r'comics', ComicViewSet, 'comics')
 
 urlpatterns = [
     url(r'^$', views.index),
@@ -45,6 +49,7 @@ urlpatterns = [
     url(r'^logout/$', views.user_logout, name='logout'),
     url(r'^blog/', include('blog.urls')),
     url(r'^game/', include('game.urls')),
+    url(r'^comic/', include('comic.urls')),
     url(r'^crawler', include('crawler.urls')),
     url(r'^manage$', views.manage),
     url(r'^manage/blogs', blog_views.manage),
@@ -67,6 +72,7 @@ urlpatterns = [
     # activity
     url(r'^activity/', include('actstream.urls')),
     # account
-    #url(r"^account/", include("account.urls")),
+    # url(r"^account/", include("account.urls")),
+    url(r'^mdeditor/', include('mdeditor.urls')),
 
 ]

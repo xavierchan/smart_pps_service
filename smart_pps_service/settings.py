@@ -54,7 +54,7 @@ DJANGO_APPS = [
     # 'account',
     'analytical',
     #'robots',
-    'comic',
+    'mdeditor',
 ]
 
 LOCAL_APPS = [
@@ -65,6 +65,7 @@ LOCAL_APPS = [
     'blog',
     'crawler',
     'game',
+    'comic',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS;
@@ -213,7 +214,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh_Hans'
 
 TIME_ZONE = 'UTC'
 
@@ -234,6 +235,12 @@ FMT_DATE = "%Y-%m-%d"
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
+if not os.path.exists(MEDIA_ROOT):
+    os.makedirs(MEDIA_ROOT)
+
 
 CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
 CELERY_ACCEPT_CONTENT = ['application/json']

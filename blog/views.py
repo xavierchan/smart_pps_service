@@ -1,22 +1,19 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from rest_framework import status
-from rest_framework.response import Response
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_exempt
+from django.http.response import JsonResponse
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework import status, filters, permissions
+from rest_framework.response import Response
+
+from common import BasePagination
 from smart_pps_service.common import viewsets
-from rest_framework import permissions
+from smart_pps_service.common.common import md_2_html2, xresult
 import serializers
 from models import Article
-from rest_framework import filters
-from django.http.response import JsonResponse
 from tasks import increate_pv
-import datetime
-datetime.timedelta(hours=1)
-
-from smart_pps_service.common.common import md_2_html2, xresult
 
 
 def index(request):
@@ -63,9 +60,10 @@ def get_tags(request):
 class ArticleViewSet(viewsets.ModelViewSet):
 
     queryset = Article.objects.filter(is_published=True)
-    serializer_class = serializers.ArticleSerializer
     filter_backends = (filters.SearchFilter,)
     search_fields = ('=category', 'tags')
+    serializer_class = serializers.ArticleSerializer
+    pagination_class = BasePagination
     permission_classes = (permissions.AllowAny,)
 
     def create(self, request, *args, **kwargs):
