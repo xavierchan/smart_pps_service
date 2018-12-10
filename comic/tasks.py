@@ -1,5 +1,7 @@
 # coding: utf-8
 
+import json
+
 from celery import shared_task
 from models import Comic, ComicChapter
 from crawlers.crawler import QQComicCrawler
@@ -17,14 +19,20 @@ def crawle_qq_comic(id):
                                  )
     for bc in c_info.get('chapters')[:1]:
         for c in bc.get('chapters')[:4]:
-            crawle_qq_comic_pic.delay(id, c.get('cid'))
+            crawle_qq_comic_pic.delay(id, c.get('cid'), c.get('title'))
     return comic
 
 
 @shared_task
-def crawle_qq_comic_pic(id, cid):
+def crawle_qq_comic_pic(id, cid, title):
     crawler = QQComicCrawler()
     comic = Comic.objects.filter(ac_id=id).first()
     c_chapter = crawler.get_chapter(id, cid)
-    comic_chapter = ComicChapter.objects.create(comic=comic, ac_cid=cid, chapter=cid, imgs=c_chapter.get('imgs'))
+    comic_chapter = ComicChapter.objects.create(
+        comic=comic,
+        ac_cid=cid,
+        chapter=cid,
+        title=title,
+        imgs=json.dumps(c_chapter.get('imgs'))
+    )
     return comic_chapter

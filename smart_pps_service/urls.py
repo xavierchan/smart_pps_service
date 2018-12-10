@@ -18,11 +18,13 @@ from django.contrib import admin
 
 from rest_framework import routers
 from rest_framework_swagger.views import get_swagger_view
+
 from member.views import UserViewSet, OrganizationViewSet, GroupViewSet
 from pps.views import ProductViewSet, OrderViewSet
 from blog import views as blog_views
 from game.views import GameViewSet
 from comic.views import ComicViewSet
+from music.views import MusicViewSet
 from finance.views import TradingRecordViewSet
 from wechat.views import LoginView
 from aliyun_oss import views as aliyun_oss_views
@@ -40,6 +42,17 @@ router.register(r'orders', OrderViewSet, 'orders')
 router.register(r'trading_records', TradingRecordViewSet, 'trading_records')
 router.register(r'games', GameViewSet, 'games')
 router.register(r'comics', ComicViewSet, 'comics')
+router.register(r'musics', MusicViewSet, 'musics')
+# router.routes.append(
+#     routers.Route(
+#         url=r'^{prefix}/arguments/(?P<thing>[^/]+)$',
+#         name='{basename}-arguments',
+#         mapping={
+#             'get': 'arguments',
+#         },
+#         initkwargs={}
+#     ),
+# )
 
 urlpatterns = [
     url(r'^$', views.index),
@@ -50,6 +63,7 @@ urlpatterns = [
     url(r'^blog/', include('blog.urls')),
     url(r'^game/', include('game.urls')),
     url(r'^comic/', include('comic.urls')),
+    url(r'^music/', include('music.urls')),
     url(r'^crawler', include('crawler.urls')),
     url(r'^manage$', views.manage),
     url(r'^manage/blogs', blog_views.manage),

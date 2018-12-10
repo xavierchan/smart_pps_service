@@ -28,7 +28,8 @@ class Comic(TimestampModel):
 
 
 class ComicChapter(TimestampModel):
-    comic = models.ForeignKey(Comic, verbose_name='漫画')
+    comic = models.ForeignKey(Comic, verbose_name='漫画', related_name='chapters')
+    title = models.CharField(verbose_name='标题', max_length=100)
     ac_cid = models.CharField(verbose_name='ac_cid', max_length=100)
     chapter = models.IntegerField(verbose_name='章节')
     imgs = models.TextField(verbose_name='图片', max_length=2000)

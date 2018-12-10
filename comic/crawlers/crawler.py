@@ -48,22 +48,26 @@ class QQComicCrawler(object):
         chrome_options = Options()
         chrome_options.add_argument('--headless')
         chrome_options.add_argument('--disable-gpu')
+        # base_path = '/Users/liying/Documents/xavier/newwp/smart_pps_service'
         driver_path = os.path.join(settings.BASE_DIR, 'comic/driver/chromedriver')
         browser = webdriver.Chrome(executable_path=driver_path, chrome_options=chrome_options)
         browser.get(chapter_url)
 
-        for i in range(20):
-            height = i * 1280
-            js = 'document.getElementById("mainView").scrollTo({}, {})'.format(height, height + 1280)
+        html_doc = browser.page_source
+        soup = BeautifulSoup(html_doc, 'html.parser')
+        page_count = len(soup.select('#comicContain')[0].select('li'))
+        for i in xrange(page_count):
+            height = i * 970
+            js = 'document.getElementById("mainView").scrollTo({}, {})'.format(height, height + 970)
             browser.execute_script(js)
-            time.sleep(1)
+            time.sleep(0.1)
 
         html_doc = browser.page_source
-
         soup = BeautifulSoup(html_doc, 'html.parser')
         container = soup.select('#comicContain')[0]
-        imgs = [(li.span.text if li.span else '', li.img.get('src')) for li in container.select('li')]
-        imgs = [li.img.get('src') for li in container.select('li')]
+
+        imgs = [(li.span.text if li.span else '', li.img.get('src')) for li in container.select('li') if str(li.img.get('src')).startswith('https://manhua.qpic.cn/manhua_detail')]
+        imgs = [img[1] for img in imgs]
         return {
             'page': container.select('.comic-text')[0].select('em')[0].text,
             'imgs': imgs
@@ -72,12 +76,7 @@ class QQComicCrawler(object):
 
 if __name__ == '__main__':
     id = '505430'
+    cid = 1
     c = QQComicCrawler()
-    c_info = c.get_info(id=id)
-    pass
-    for bc in c_info.get('chapters')[:1]:
-        print bc
-        for c in bc.get('chapters')[:4]:
-            pass
-    # r = crawle_qq_comic(id)
-    # print dict(result['imgs']).values()
+    # c_info = c.get_info(id)
+    c_chapters = c.get_chapter(id, cid)

@@ -1,20 +1,53 @@
 {% extends 'common/base.html' %}
 {% load static %}
 {% block content %}
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
-    <script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
-    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
     <style>
-    .game-item {
+    .comic-body {
+         width: 1070px;
+        margin: 0 auto;
+        padding-top: 20px;
+        padding-bottom: 20px;"
+    }
+
+    .comic-item {
         margin-top: 10px;
         margin-bottom: 10px;
     }
+
+    .el-carousel__item h3 {
+    color: #475669;
+    font-size: 18px;
+    opacity: 0.75;
+    line-height: 300px;
+    margin: 0;
+  }
+
+  .el-carousel__item:nth-child(2n) {
+    background-color: #99a9bf;
+  }
+
+  .el-carousel__item:nth-child(2n+1) {
+    background-color: #d3dce6;
+  }
     </style>
     {% verbatim %}
-    <div id="app" style="width: 1070px; margin: 0 auto; padding-top: 20px; padding-bottom: 20px;">
+    <div id="carousel" class="comic-body">
+    <el-carousel :interval="5000" indicator-position="outside">
+    <el-carousel-item v-for="item in 6" :key="item">
+      <h3>{{ item }}</h3>
+    </el-carousel-item>
+  </el-carousel>
+    </div>
+     <el-breadcrumb separator-class="el-icon-arrow-right" class="comic-body">
+  <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+  <el-breadcrumb-item>活动管理</el-breadcrumb-item>
+  <el-breadcrumb-item>活动列表</el-breadcrumb-item>
+  <el-breadcrumb-item>活动详情</el-breadcrumb-item>
+</el-breadcrumb>
+    <div id="app" class="comic-body">
+
         <el-row :gutter="20">
-            <el-col :span="6" v-for="comic in comics" :key="comic.id" class="game-item">
+            <el-col :span="6" v-for="comic in comics" :key="comic.id" class="comic-item">
                 <div class="grid-content bg-purple">
                     <el-card :body-style="{ padding: '0px' }">
                         <img v-bind:src="comic.cover" class="image">
@@ -23,7 +56,7 @@
                             <span>{{ comic.intro }}</span>
                             <div class="bottom clearfix">
                                 <time class="time">{{ comic.upt }}</time>
-                                <el-button type="text" class="button"><a v-bind:href="'/comic/'+comic.id">开始阅读</a></el-button>
+                                <el-button type="text" class="button"><a v-bind:href="'/comic/'+comic.id+'/chapters/'">开始阅读</a></el-button>
                             </div>
                         </div>
                     </el-card>
@@ -32,6 +65,14 @@
     </div>
     {% endverbatim %}
 
+    <script>
+    new Vue({
+        el: '#carousel',
+        data: function () {
+            return {}
+        }
+    })
+    </script>
     <script>
         new Vue({
             el: '#app',
@@ -45,16 +86,16 @@
                 this.fetchComics();
             },
             methods:{
-            fetchComics: function() {
-                var _self = this;
-                //发送get请求
-                this.$http.get('/api/comics').then(function(res) {
-                    _self.comics = res.data.results;
-                },function(){
-                    console.log('请求失败处理');
-                });
+                fetchComics: function () {
+                    var _self = this;
+                    //发送get请求
+                    this.$http.get('/api/comics').then(function (res) {
+                        _self.comics = res.data.results;
+                    }, function () {
+                        console.log('请求失败处理');
+                    });
+                }
             }
-        }
         })
     </script>
 

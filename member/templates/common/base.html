@@ -7,59 +7,90 @@
 <html lang="en-US">
 <!--<![endif]-->
 
-    <head>
-        <!-- META TAGS -->
-        <meta charset="UTF-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>暴走的二进制</title>
-        <link rel="shortcut icon" href="{% static 'images/favicon.png' %}"/>
+<head>
+    <!-- META TAGS -->
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>暴走的二进制</title>
+    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}"/>
 
-        {% include "common/css.html" %}
+    {% include "common/css.html" %}
 
-        <script type='text/javascript' src='{% static "js/jquery.min.js" %}'></script>
+    <script type='text/javascript' src='{% static "js/jquery.min.js" %}'></script>
 
-        <!-- 百度统计 -->
-        <script>
-            var _hmt = _hmt || [];
-            (function() {
-              var hm = document.createElement("script");
-              hm.src = "https://hm.baidu.com/hm.js?5548934cba38248a70b97e0882763368";
-              var s = document.getElementsByTagName("script")[0];
-              s.parentNode.insertBefore(hm, s);
-            })();
-        </script>
+    <!-- 百度统计 -->
+    <script>
+        var _hmt = _hmt || [];
+        (function () {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?5548934cba38248a70b97e0882763368";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
 
-    </head>
+    <script>
+        String.prototype.format = function (args) {
+            var result = this;
+            if (arguments.length > 0) {
+                if (arguments.length == 1 && typeof (args) == "object") {
+                    for (var key in args) {
+                        if (args[key] != undefined) {
+                            var reg = new RegExp("({" + key + "})", "g");
+                            result = result.replace(reg, args[key]);
+                        }
+                    }
+                }
+                else {
+                    for (var i = 0; i < arguments.length; i++) {
+                        if (arguments[i] != undefined) {
+                            var reg = new RegExp("({)" + i + "(})", "g");
+                            result = result.replace(reg, arguments[i]);
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+    </script>
 
-    <body>
-        <!-- Start of Header -->
-        <div class="header-wrapper">
-            <header>
-                <div class="container">
-                    <div class="logo-container">
-                        <!-- Website Logo -->
-                        <a href="/" title="暴走的二进制">
-                            <img src='{% static "images/logo.png" %}' alt="暴走的二进制">
-                        </a>
-                        <span class="tag-line">暴走的二进制</span>
-                    </div>
-                    <!-- Main Navigation -->
-                    {% include "common/nav.html" %}
-                </div>
-            </header>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+{#    <link rel="stylesheet" href="{% static 'css/element/index.css' %}">#}
+    <script src="{% static 'js/vue.js' %}"></script>
+    <script src="{% static 'js/vue-resource.min.js' %}"></script>
+{#    <script src="{% static 'js/element/index.js' %}"></script>#}
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+</head>
+
+<body>
+<!-- Start of Header -->
+<div class="header-wrapper">
+    <header>
+        <div class="container">
+            <div class="logo-container">
+                <!-- Website Logo -->
+                <a href="/" title="暴走的二进制">
+                    <img src='{% static "images/logo.png" %}' alt="暴走的二进制">
+                </a>
+                <span class="tag-line">暴走的二进制</span>
+            </div>
+            <!-- Main Navigation -->
+            {% include "common/nav.html" %}
         </div>
-        <!-- End of Header -->
+    </header>
+</div>
+<!-- End of Header -->
 
-        <div>
-            {% block content %}
-                <div>这里是默认内容，所有继承自这个模板的，如果不覆盖就显示这里的默认内容。</div>
-            {% endblock %}
-        </div>
+<div>
+    {% block content %}
+        <div>这里是默认内容，所有继承自这个模板的，如果不覆盖就显示这里的默认内容。</div>
+    {% endblock %}
+</div>
 
-        {% include "common/footer.html" %}
+{% include "common/footer.html" %}
 
-        {% include "common/js.html" %}
+{% include "common/js.html" %}
 
-    </body>
+</body>
 
 </html>

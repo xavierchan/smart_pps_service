@@ -27,7 +27,7 @@ class ComicAdmin(admin.ModelAdmin):
 
 @admin.register(ComicChapter)
 class ComicChapterAdmin(admin.ModelAdmin):
-    list_display = ('id', 'comic_name', 'chapter', 'imgs')
+    list_display = ('id', 'comic_name', 'title', 'chapter', 'imgs')
     readonly_fields = ['imgs']
     list_filter = ('comic',)
     list_per_page = 10

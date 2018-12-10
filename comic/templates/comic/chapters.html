@@ -1,10 +1,6 @@
 {% extends 'common/base.html' %}
 {% load static %}
 {% block content %}
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
-    <script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
-    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
     <style>
     .comic-item {
         margin-top: 10px;
@@ -13,44 +9,61 @@
     </style>
     {% verbatim %}
     <div id="app" style="width: 1070px; margin: 0 auto; padding-top: 20px; padding-bottom: 20px;">
-        <el-row :gutter="20">
-            <el-col :span="6" v-for="comic in comics" :key="comic.id" class="comic-item">
+    <el-row :gutter="20">
+            <el-col :span="6" class="comic-item">
                 <div class="grid-content bg-purple">
                     <el-card :body-style="{ padding: '0px' }">
-                        <img v-bind:src="(comic.cover)" class="image">
+                        <img v-bind:src="comic.cover" class="image">
                         <div style="padding: 14px;">
                             <span>{{ comic.name }}</span>
                             <span>{{ comic.intro }}</span>
                             <div class="bottom clearfix">
                                 <time class="time">{{ comic.upt }}</time>
-                                {{ key }}
-                                <el-button type="text" class="button"><a v-bind:href="(comic.id)">开始阅读</a></el-button>
+                                <el-button type="text" class="button"><a v-bind:href="'/comic/'+comic.id+'/chapters/'">开始阅读</a></el-button>
                             </div>
                         </div>
                     </el-card>
                 </div>
             </el-col>
+            <el-col :span="18" class="comic-item">
+                <el-row>
+                    <el-col><el-button type="primary" size="small" plain v-for="chapter in chapters" :key="chapter.id" >{{ chapter.chapter }}</el-button></el-col>
+                </el-row>
+                <el-row>
+                    <el-col>
+                        <el-card :body-style="{ padding: '0px' }" v-for="image in chapters[1].img_list" :key="image" >
+                            <img v-bind:src="image" class="image">
+                            </el-card>
+                    </el-col>
+                </el-row>
+                </el-col>
+        <el-row :gutter="20">
+
     </div>
     {% endverbatim %}
 
     <script>
+        var id = '{{ comic.id }}';
         new Vue({
             el: '#app',
             data: function () {
                 return {
                     visible: false,
-                    comics: []
+                    comic: {},
+                    chapters: [],
+                    chapter: {}
                 }
             },
             created: function () {
+                this.fetchComic();
                 this.fetchComicChapters();
             },
             methods:{
-            fetchGames: function() {
+            fetchComic: function() {
                 var _self = this;
                 //发送get请求
-                this.$http.get('/api/comics').then(function(res) {
-                    _self.comics = res.data.results;
+                this.$http.get('/api/comics/{id}'.format({id: id})).then(function(res) {
+                    _self.comic = res.data;
                 },function(){
                     console.log('请求失败处理');
                 });
@@ -59,12 +72,21 @@
                 fetchComicChapters: function() {
                 var _self = this;
                 //发送get请求
-                this.$http.get('/api/comics').then(function(res) {
-                    _self.comics = res.data.results;
+                this.$http.get('/api/comics/{id}/chapters/'.format({id: id})).then(function(res) {
+                    _self.chapters = res.data;
                 },function(){
                     console.log('请求失败处理');
                 });
-            }
+            },
+                fetchChapter: function () {
+                    var _self = this;
+                //发送get请求
+                this.$http.get('/api/comics/{id}/chapters/'.format({id: id})).then(function(res) {
+                    _self.chapters = res.data;
+                },function(){
+                    console.log('请求失败处理');
+                });
+                }
         }
         })
     </script>
