@@ -37,6 +37,7 @@ APPEND_SLASH = False
 
 DJANGO_APPS = [
     'django.contrib.admin',
+    'django.contrib.admindocs',
     'django.contrib.auth',
     'django.contrib.sites',
     'django.contrib.contenttypes',
@@ -55,6 +56,8 @@ DJANGO_APPS = [
     'analytical',
     #'robots',
     'mdeditor',
+    'haystack',
+    'dynamic_scraper',
 ]
 
 LOCAL_APPS = [
@@ -67,6 +70,7 @@ LOCAL_APPS = [
     'game',
     'comic',
     'music',
+    'ai',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS;
@@ -215,25 +219,29 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-LANGUAGE_CODE = 'zh-Hans'
-
-TIME_ZONE = 'UTC'
-
-USE_I18N = True
-USE_L10N = True
-USE_TZ = True
 
 LOGIN_URL = '/login'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 SITE_ID = 1
 
-FMT_DATETIME = "%Y-%m-%d %H:%M:%S"
-FMT_DATE = "%Y-%m-%d"
+# timezone settings
+USE_TZ = True
+TIME_ZONE = 'Asia/Shanghai'
 
+# time settings
+USE_L10N = False
+DATE_FORMAT = "Y-m-d"
+TIME_FORMAT = "H:i:s"
+DATETIME_FORMAT = "Y-m-d H:i:s"
+
+# translate settings
+USE_I18N = True
+LANGUAGE_CODE = 'zh-Hans'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
-
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
@@ -255,3 +263,11 @@ TEMPLATE_CONTEXT_PROCESSORS = [
 
 SOCIAL_AUTH_GITHUB_KEY = 'dc0df6a5de9d855a7cdd'
 SOCIAL_AUTH_GITHUB_SECRET = 'f6d66b3d1b51c097cc4d4c862faeac7ec9fa1880'
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+        'URL': 'http://127.0.0.1:9200/',
+        'INDEX_NAME': 'haystack',
+    },
+}

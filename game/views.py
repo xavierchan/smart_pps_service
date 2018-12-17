@@ -15,6 +15,11 @@ def index(request):
     return render_to_response('game/index.html')
 
 
+@login_required
+def game(request, slug):
+    return render_to_response('game/{slug}.html'.format(slug=slug))
+
+
 class GameViewSet(viewsets.ModelViewSet):
 
     queryset = Game.objects.all()

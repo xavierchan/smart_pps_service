@@ -1,0 +1,79 @@
+{% extends 'common/base.html' %}
+{% load static %}
+{% block content %}
+    <style>
+    .comic-body {
+         width: 1070px;
+        margin: 0 auto;
+        padding-top: 20px;
+        padding-bottom: 20px;"
+    }
+
+    .comic-item {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .el-carousel__item h3 {
+    color: #475669;
+    font-size: 18px;
+    opacity: 0.75;
+    line-height: 300px;
+    margin: 0;
+  }
+
+  .el-carousel__item:nth-child(2n) {
+    background-color: #99a9bf;
+  }
+
+  .el-carousel__item:nth-child(2n+1) {
+    background-color: #d3dce6;
+  }
+    </style>
+    {% verbatim %}
+    <div id="app" class="comic-body">
+
+        <el-row :gutter="20">
+            <el-col :span="6" v-for="comic in comics" :key="comic.id" class="comic-item">
+                <div class="grid-content bg-purple">
+                    <el-card :body-style="{ padding: '0px' }">
+                        <img src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3279352516,1511223866&fm=11&gp=0.jpg" class="image">
+                        <div style="padding: 14px;">
+                            <span>人脸识别功能</span>
+                            <div class="bottom clearfix">
+                                <time class="time">{{ comic.upt }}</time>
+                                <el-button type="text" class="button"><a href="/ai/face_recognite/">开始体验</a></el-button>
+                            </div>
+                        </div>
+                    </el-card>
+                </div>
+            </el-col>
+    </div>
+    {% endverbatim %}
+    <script>
+        new Vue({
+            el: '#app',
+            data: function () {
+                return {
+                    visible: false,
+                    comics: []
+                }
+            },
+            created: function () {
+                this.fetchComics();
+            },
+            methods:{
+                fetchComics: function () {
+                    var _self = this;
+                    //发送get请求
+                    this.$http.get('/api/comics').then(function (res) {
+                        _self.comics = res.data.results;
+                    }, function () {
+                        console.log('请求失败处理');
+                    });
+                }
+            }
+        })
+    </script>
+
+{% endblock %}

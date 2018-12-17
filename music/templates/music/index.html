@@ -12,6 +12,11 @@
     </style>
     {% verbatim %}
     <div id="app" class="music-body">
+    <el-button size="mini">
+        <a href="/music/search/">搜索歌曲</a>
+</router-link>
+
+    </el-button>
         <el-row>
             <el-col :span="4">
                 <el-popover
@@ -53,8 +58,10 @@
                 {{ formatTime(music.currentTime)}}/{{ formatTime(music.maxTime)}}
             </el-col>
         </el-row>
-        <audio ref="music">
-            <source v-bind:src="music.url" type="audio/mpeg">
+        <audio
+                ref="music"
+                v-bind:src="music.url"
+        >
         </audio>
         <el-row>
             <el-col :span="18">
@@ -125,7 +132,6 @@
             el: '#app',
             data() {
                 return {
-                    musicUrl: 'http://sc1.111ttt.cn:8282/2018/1/03m/13/396131232171.m4a?tflag=1519095601&pin=6cd414115fdb9a950d827487b16b5f97#.mp3',
                     music: {
                         isPlay: false,
                         currentTime: 0,
@@ -194,7 +200,7 @@
                         self.$refs.music.pause()
                     }
                     self.music.isPlay = !self.$refs.music.paused
-                    this.$nextTick(() => {
+                    self.$nextTick(() => {
                         document.getElementById('play').blur()
                     })
                 },
@@ -212,7 +218,7 @@
                     let self = this;
                     return '{minutes}:{seconds}'.format({
                         minutes: self.getDuration(parseInt(time / 60)),
-                        seconds: self.getDuration(time % 60)
+                        seconds: self.getDuration(parseInt(time % 60))
                     });
                 },
                 playMusic(row) {

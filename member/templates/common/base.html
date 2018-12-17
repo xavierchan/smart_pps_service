@@ -1,4 +1,5 @@
 {% load static %}
+{% load google_analytics_js %}
 <!doctype html>
 <!--[if lt IE 7]> <html class="lt-ie9 lt-ie8 lt-ie7" lang="en-US"> <![endif]-->
 <!--[if IE 7]>    <html class="lt-ie9 lt-ie8" lang="en-US"> <![endif]-->
@@ -55,11 +56,12 @@
     </script>
 
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-{#    <link rel="stylesheet" href="{% static 'css/element/index.css' %}">#}
+    {#    <link rel="stylesheet" href="{% static 'css/element/index.css' %}">#}
     <script src="{% static 'js/vue.js' %}"></script>
     <script src="{% static 'js/vue-resource.min.js' %}"></script>
-{#    <script src="{% static 'js/element/index.js' %}"></script>#}
+    {#    <script src="{% static 'js/element/index.js' %}"></script>#}
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    {% google_analytics_js %}
 </head>
 
 <body>

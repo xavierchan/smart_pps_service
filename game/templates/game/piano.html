@@ -1,0 +1,119 @@
+{% extends 'common/base.html' %}
+{% load static %}
+{% block content %}
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+    <script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="{% static '/js/notes.js' %}"></script>
+    <style>
+        .game-item {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+    <style scoped>
+        .group {
+            font-size: 0;
+            position: relative;
+            display: flex;
+            flex-grow: 1;
+        }
+
+        button {
+            width: 14.29%;
+            flex: 1;
+            height: 300px;
+            display: inline-block;
+            border: 1px solid #ccc;
+            outline: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        button > span {
+            position: absolute;
+            bottom: 10px;
+        }
+
+        .white:active,
+        .white.active {
+            background: #ececec;
+        }
+
+        .white {
+            background: #fff;
+        }
+
+        .black {
+            background: #000;
+            border-color: #000;
+            height: 150px;
+            width: 7.15%;
+            position: absolute;
+        }
+    </style>
+    {% verbatim %}
+    <div id="app" style="width: 1070px; margin: 0 auto; padding-top: 20px; padding-bottom: 20px;">
+        <el-row :gutter="20">
+            <el-col :span="6" class="game-item">
+                <div class="group">
+                    <button :class="{'white': whites.indexOf(n) > -1, 'black': blacks.indexOf(n) > -1}" v-for="n in 12"
+                            :style="{ left: calcLeft(n) + '%' }" data-note="{{start+n}}" @click="play(start+n)"><span
+                            v-show="n === 0">C</span></button>
+                </div>
+            </el-col>
+    </div>
+    {% endverbatim %}
+
+    <script>
+        const prefix = 'data:audio/mpeg;base64,';
+        const base = 2;
+        const groupKeys = 12;
+        new Vue({
+            el: '#app',
+            data: function () {
+                return {
+                    blacks: [1, 3, 6, 8, 10],
+                    whites: [0, 2, 4, 5, 7, 9, 11]
+                }
+            },
+            props: {
+                group: {
+                    type: Number,
+                    default: 0
+                }
+            },
+            computed: {
+                start() {
+                    return this.group * groupKeys;
+                }
+            },
+            created: function () {
+            },
+            methods: {
+                play(keyCode) {
+            let keys = [90,88,67,86,66,78,77,65,83,68,70,71,72,74,81,87,69,82,84,89,85];
+            if(keys.indexOf(keyCode) < 0) {
+                return;
+            }
+            let whites = [0, 2, 4, 5, 7, 9, 11];
+            let index = base + 2 * groupKeys + whites[keys.indexOf(keyCode) % 7] + parseInt(keys.indexOf(keyCode) / 7)*groupKeys;
+            let audio = new Audio(prefix + notes[index]);
+            audio.play();
+        },
+                calcLeft(index) {
+                    var unit = 14.29;
+                    var i = this.blacks.indexOf(index);
+                    if (i < 2) {
+                        return unit * (0.75 + i);
+                    }
+                    return unit * (1.75 + i);
+                },
+                click(index) {
+                }
+            }
+        })
+    </script>
+
+{% endblock %}

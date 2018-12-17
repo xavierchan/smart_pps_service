@@ -1,0 +1,153 @@
+{% extends 'common/base.html' %}
+{% load static %}
+{% block content %}
+    <style>
+        .comic-body {
+            width: 1070px;
+            margin: 0 auto;
+            padding-top: 20px;
+            padding-bottom: 20px;
+        "
+        }
+
+        .comic-item {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .el-carousel__item h3 {
+            color: #475669;
+            font-size: 18px;
+            opacity: 0.75;
+            line-height: 300px;
+            margin: 0;
+        }
+
+    </style>
+    {% verbatim %}
+    <div id="app" class="comic-body">
+        <el-upload
+                class="upload-demo"
+                action="https://jsonplaceholder.typicode.com/posts/"
+                :on-preview="handlePreview"
+                :on-remove="handleRemove"
+                :before-remove="beforeRemove"
+                multiple
+                :limit="3"
+                :on-exceed="handleExceed"
+                :file-list="fileList">
+            <el-button size="small" type="primary">点击上传</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+        </el-upload>
+        <div>
+            <video ref="video" width="320" height="320" autoplay></video>
+            <el-button size="mini" @click="takePhoto">拍 照</el-button>
+            <el-switch
+                    active-text="开启"
+                    inactive-text="关闭"
+                    @change="changeCameraStatus">
+            </el-switch>
+            </di>
+            <canvas style="" ref="canvas" width="320" height="320"></canvas>
+        </div>
+        <el-table
+                :data="videos"
+                style="width: 100%"
+                :default-sort="{prop: 'date', order: 'descending'}"
+        >
+            <el-table-column
+                    prop="date"
+                    label="日期"
+                    sortable
+                    width="180">
+            </el-table-column>
+            <el-table-column
+                    prop="name"
+                    label="姓名"
+                    sortable
+                    width="180">
+            </el-table-column>
+            <el-table-column
+                    prop="address"
+                    label="地址"
+            >
+            </el-table-column>
+        </el-table>
+    </div>
+    <video ref="video" width="320" height="320" src="https://oss.xavierit.cn/201805231249083638.mp4" autoplay></video>
+    {% endverbatim %}
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: function () {
+                return {
+                    visible: false,
+                    comics: [],
+                    videoStream: null,
+                    fileList: [],
+                    videos: [{
+                        date: '2016-05-02',
+                        name: '王小虎',
+                        address: '上海市普陀区金沙江路 1518 弄'
+                    }]
+                }
+            },
+            created: function () {
+                {#this.getVideo();#}
+            },
+            methods: {
+                takePhoto() {
+                    this.$nextTick(() => {
+                        this.context = this.$refs.canvas.getContext("2d")
+                        this.context.drawImage(this.$refs.video, 0, 0, 330, 250);
+                    })
+                },
+                changeCameraStatus(newVal) {
+                    let self = this;
+                    let video = self.$refs.video;
+                    if (newVal) {
+                        navigator.mediaDevices.getUserMedia({
+                            "video": {
+                                width: {ideal: 1280},
+                                height: {ideal: 720}
+                            }
+                        })
+                            .then(function (stream) {
+                                if ("srcObject" in video) {
+                                    self.videoStream = stream;
+                                    video.srcObject = stream;
+                                } else {
+                                    video.src = window.URL.createObjectURL(stream);
+                                }
+                                if (video.paused) {
+                                    video.play();
+                                }
+                            })
+                            .catch(function (error) {
+                                console.log(error);
+                            })
+                    } else {
+                        if (self.videoStream != null) {
+                            self.videoStream.getTracks()[0].stop();
+                            self.$refs.video.src = '';
+                        }
+                    }
+                },
+                handleRemove(file, fileList) {
+                    console.log(file, fileList);
+                },
+                handlePreview(file) {
+                    console.log(file);
+                },
+                handleExceed(files, fileList) {
+                    this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+                },
+                beforeRemove(file, fileList) {
+                    return this.$confirm(`确定移除 ${ file.name }？`);
+                }
+            }
+        })
+    </script>
+
+{% endblock %}

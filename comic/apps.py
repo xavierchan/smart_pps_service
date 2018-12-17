@@ -6,3 +6,4 @@ from django.apps import AppConfig
 
 class ComicConfig(AppConfig):
     name = 'comic'
+    verbose_name = '漫画'

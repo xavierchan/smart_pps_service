@@ -15,7 +15,7 @@ class Article(models.Model):
     author = models.ForeignKey(User, verbose_name='作者')
     pv = models.IntegerField(verbose_name='pv', default=0)
     uv = models.IntegerField(verbose_name='uv', default=0)
-    is_spread = models.BooleanField(verbose_name='是否推广', default=False)
+    is_recommend = models.BooleanField(verbose_name='是否推荐', default=False)
     crt = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
     upt = models.DateTimeField(auto_now=True, verbose_name='更新时间')
 

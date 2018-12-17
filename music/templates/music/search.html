@@ -1,0 +1,131 @@
+{% extends 'common/base.html' %}
+{% load static %}
+{% block content %}
+    <style>
+        .music-body {
+            width: 1070px;
+            margin: 0 auto;
+            padding-top: 20px;
+            padding-bottom: 20px;
+        "
+        }
+    </style>
+    {% verbatim %}
+    <div id="app" class="music-body">
+        <el-row>
+            <el-col :span="4">
+                <el-input v-model="searchName" placeholder="请输入歌名" clearable></el-input>
+                <el-button size="mini" @click="handleSearch">搜索</el-button>
+            </el-col>
+            <el-col :span="14" style="padding-left: 20px">
+
+            </el-col>
+            <el-col :span="6" style="padding: 9px 0px 0px 10px;color:#909399;font-size: 13px">
+            </el-col>
+        </el-row>
+     <el-row>
+            <el-col :span="18">
+                <el-table
+                        :data="musics"
+                        :show-header="false"
+                        size="mini"
+                        stripe
+                        style="width: 100%"
+                        v-loading="loading"
+                        element-loading-spinner="el-icon-loading"
+                        element-loading-text="拼命加载中"
+                        element-loading-background="rgba(0, 0, 0, 0.8)"
+                >
+                    <el-table-column
+                            type="index"
+                            width="40"
+                    >
+                    </el-table-column>
+                    <el-table-column
+                            label=""
+                            width="50"
+                    >
+                        <template slot-scope="scope">
+                            <el-button
+                                    @click="playMusic(scope.row)"
+                                    id="play"
+                                    size="mini"
+                                    slot="reference"
+                                    :icon="scope.isPlay ? 'el-icon-refresh' : 'el-icon-caret-right'"
+                                    circle></el-button>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="name"
+                            label="名称"
+                            width="180">
+                    </el-table-column>
+                    <el-table-column
+                            prop="duration"
+                            label="时长"
+                            width="60"
+                    >
+                    </el-table-column>
+                    <el-table-column
+                            prop="singer"
+                            label="歌手">
+                    </el-table-column>
+                    <el-table-column
+                            prop="album"
+                            label="专辑">
+                    </el-table-column>
+                </el-table>
+                <el-pagination
+                        @current-change="fetchMusics(musicPager.page)"
+                        layout="prev, pager, next"
+                        :total="musicPager.total"
+                        :current-page.sync="musicPager.page"
+                >
+                </el-pagination>
+            </el-col>
+        </el-row>
+    </div>
+    {% endverbatim %}
+
+    <script>
+        new Vue({
+            el: '#app',
+            data() {
+                return {
+                    searchName: '',
+                    musics: [],
+                    musicPager: {
+                        page: 1,
+                        total: 0
+                    },
+                    loading: false
+                }
+            },
+            created: function () {
+                let self = this;
+            },
+            methods: {
+                handleSearch: function (page) {
+                    let self = this;
+                    self.loading = true;
+                    page = page != undefined ? page : self.musicPager.page;
+                    size = self.musicPager.size;
+                    let pagerString = '?page={page}&size={size}'.format({page: page, size: size});
+                    //发送get请求
+                    this.$http.get('/api/musics' + pagerString).then(function (res) {
+                        self.musics = res.data.results.map((value, index, array) => {
+                            value.isPlay = false;
+                            return value;
+                        });
+                        self.musicPager.page = page;
+                        self.musicPager.total = res.data.count;
+                        self.loading = false;
+                    }, function () {
+                        console.log('请求失败处理');
+                    });
+                },
+            }
+        })
+    </script>
+
+{% endblock %}

@@ -43,16 +43,6 @@ router.register(r'trading_records', TradingRecordViewSet, 'trading_records')
 router.register(r'games', GameViewSet, 'games')
 router.register(r'comics', ComicViewSet, 'comics')
 router.register(r'musics', MusicViewSet, 'musics')
-# router.routes.append(
-#     routers.Route(
-#         url=r'^{prefix}/arguments/(?P<thing>[^/]+)$',
-#         name='{basename}-arguments',
-#         mapping={
-#             'get': 'arguments',
-#         },
-#         initkwargs={}
-#     ),
-# )
 
 urlpatterns = [
     url(r'^$', views.index),
@@ -60,10 +50,11 @@ urlpatterns = [
     url(r'^oauth/', include('social_django.urls', namespace='social')),
     url(r'^login/$', views.user_login, name='login'),
     url(r'^logout/$', views.user_logout, name='logout'),
-    url(r'^blog/', include('blog.urls')),
-    url(r'^game/', include('game.urls')),
-    url(r'^comic/', include('comic.urls')),
-    url(r'^music/', include('music.urls')),
+    url(r'^blog/', include('blog.urls', namespace='blog')),
+    url(r'^game/', include('game.urls', namespace='game')),
+    url(r'^ai/', include('ai.urls', namespace='ai')),
+    url(r'^comic/', include('comic.urls', namespace='comic')),
+    url(r'^music/', include('music.urls', namespace='music')),
     url(r'^crawler', include('crawler.urls')),
     url(r'^manage$', views.manage),
     url(r'^manage/blogs', blog_views.manage),
@@ -73,6 +64,7 @@ urlpatterns = [
     url(r'^plan$', views.plan),
     url(r'^about$', views.about),
     url(r'^admin/', admin.site.urls),
+    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^docs', schema_view),
     url(r'^wx_login', LoginView.as_view()),

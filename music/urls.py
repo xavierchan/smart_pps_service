@@ -6,4 +6,5 @@ import views
 
 urlpatterns = [
     url(r'^$', views.index),
+    url(r'^search/$', views.search),
 ]

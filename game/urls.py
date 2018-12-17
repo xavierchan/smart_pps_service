@@ -5,5 +5,6 @@ import views
 
 
 urlpatterns = [
-    url(r'', views.index),
+    url(r'^$', views.index),
+    url(r'^(?P<slug>(\w+))$', views.game),
 ]

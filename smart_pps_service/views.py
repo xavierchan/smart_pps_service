@@ -15,7 +15,7 @@ from blog.models import Article
 
 def index(request):
     num = 5
-    spead_articles = Article.objects.filter(is_published=True, is_spread=True).order_by('crt')
+    spead_articles = Article.objects.filter(is_published=True, is_recommend=True).order_by('crt')
     latest = spead_articles[:num].only('id', 'title', 'upt', 'pv')
     return render(request, 'home.html', {
         'latest_articles': latest

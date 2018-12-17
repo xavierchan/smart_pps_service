@@ -2,17 +2,13 @@
 # @Time    : 2018/05/15 19:08
 # @Author  : xavier
 
-import json
 
-from django.conf import settings
 from rest_framework import serializers
 
 from models import Comic, ComicChapter
-FMT_DATE = settings.FMT_DATE
 
 
 class ComicSerializer(serializers.ModelSerializer):
-    upt = serializers.DateTimeField(format=FMT_DATE, required=False, read_only=True)
 
     class Meta:
         model = Comic
