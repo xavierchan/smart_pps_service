@@ -45,14 +45,13 @@ def detail(request, id):
 
 @csrf_exempt
 def get_categorys(request):
-    categorys = list(
-        set([item.get('category') for item in Article.objects.all().values('category') if item.get('category')]))
+    categorys = list(set(Article.objects.all().values_list('category', flat=True)))
     return JsonResponse(data=xresult(data=categorys))
 
 
 @csrf_exempt
 def get_tags(request):
-    tags = ",".join([item.get('tags') for item in Article.objects.all().values('tags') if item.get('tags')])
+    tags = ",".join(Article.objects.all().values_list('tags', flat=True))
     tags = list(set(tags.split(',')))
     return JsonResponse(data=xresult(data=tags))
 

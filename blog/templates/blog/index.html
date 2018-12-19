@@ -227,7 +227,7 @@
         }
         function renderCategorys() {
             $.ajax({
-                url: '{% url "blog_categorys" %}',
+                url: '{% url "blog:categorys" %}',
                 type: 'GET',
                 success: function (res) {
                     if (res.code === 0) {
@@ -242,7 +242,7 @@
 
         function renderTags() {
             $.ajax({
-                url: '{% url "blog_tags" %}',
+                url: '{% url "blog:tags" %}',
                 type: 'GET',
                 success: function (res) {
                     if (res.code === 0) {

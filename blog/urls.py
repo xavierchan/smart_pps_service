@@ -6,7 +6,7 @@ import views
 
 urlpatterns = [
     url(r'^$', views.index),
-    url(r'^tags/$', views.get_tags, name='blog_tags'),
-    url(r'^categorys/$', views.get_categorys, name='blog_categorys'),
+    url(r'^tags/$', views.get_tags, name='tags'),
+    url(r'^categorys/$', views.get_categorys, name='categorys'),
     url(r'^(?P<id>(\d+))/$', views.detail),
 ]
