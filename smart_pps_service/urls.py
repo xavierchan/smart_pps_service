@@ -25,7 +25,6 @@ from blog import views as blog_views
 from game.views import GameViewSet
 from comic.views import ComicViewSet
 from music.views import MusicViewSet
-from finance.views import TradingRecordViewSet
 from wechat.views import LoginView
 from aliyun_oss import views as aliyun_oss_views
 import views
@@ -39,7 +38,6 @@ router.register(r'groups', GroupViewSet, 'groups')
 router.register(r'users', UserViewSet, 'users')
 router.register(r'products', ProductViewSet, 'products')
 router.register(r'orders', OrderViewSet, 'orders')
-router.register(r'trading_records', TradingRecordViewSet, 'trading_records')
 router.register(r'games', GameViewSet, 'games')
 router.register(r'comics', ComicViewSet, 'comics')
 router.register(r'musics', MusicViewSet, 'musics')

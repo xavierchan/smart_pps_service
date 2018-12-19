@@ -63,7 +63,6 @@ DJANGO_APPS = [
 LOCAL_APPS = [
     'member',
     'pps',
-    'finance',
     'aliyun_oss',
     'blog',
     'crawler',
