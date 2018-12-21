@@ -5,7 +5,7 @@ import json
 
 from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, render_to_response
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 
@@ -17,7 +17,7 @@ def index(request):
     num = 5
     spead_articles = Article.objects.filter(is_published=True, is_recommend=True).order_by('crt')
     latest = spead_articles[:num].only('id', 'title', 'upt', 'pv')
-    return render(request, 'home.html', {
+    return render(request, 'index.html', {
         'latest_articles': latest
     })
 
@@ -71,3 +71,11 @@ def plan(request):
 
 def about(request):
     return render(request, 'about.html')
+
+
+def page_not_found(request):
+    return render_to_response('404.html')
+
+
+def page_error(request):
+    return render_to_response('500.html')

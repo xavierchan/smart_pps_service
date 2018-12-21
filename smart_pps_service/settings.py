@@ -28,7 +28,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '5kuo*-vgs-jp3-zmbmnfl160=-g*4xh@n7mjr0r47&5^-m$lu9'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 APPEND_SLASH = False
@@ -149,7 +149,7 @@ SWAGGER_SETTINGS = {
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -169,36 +169,26 @@ WSGI_APPLICATION = 'smart_pps_service.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
-
-if False:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        }
-    }
-else:
-    DATABASES = {
-        'default': {
-            "ENGINE": "django.db.backends.mysql",
-            "HOST": MYSQL.get('HOST'),
-            "PORT": MYSQL.get('PORT'),
-            "NAME": MYSQL.get('NAME'),
-            "USER": MYSQL.get('USER'),
-            "PASSWORD": MYSQL.get('PASSWORD'),
-            'OPTIONS': {
-                'charset': 'utf8mb4',
-                'init_command': 'SET default_storage_engine=INNODB',
-            },
-            'TEST_CHARSET': 'utf8',
-            'TEST_COLLATION': 'utf8_general_ci'
+DATABASES = {
+    'default': {
+        "ENGINE": "django.db.backends.mysql",
+        "HOST": MYSQL.get('HOST'),
+        "PORT": MYSQL.get('PORT'),
+        "NAME": MYSQL.get('NAME'),
+        "USER": MYSQL.get('USER'),
+        "PASSWORD": MYSQL.get('PASSWORD'),
+        'OPTIONS': {
+            'charset': 'utf8mb4',
+            'init_command': 'SET default_storage_engine=INNODB',
         },
+        'TEST_CHARSET': 'utf8',
+        'TEST_COLLATION': 'utf8_general_ci'
     }
+}
 
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -217,7 +207,6 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
-
 
 LOGIN_URL = '/login'
 LOGIN_REDIRECT_URL = '/'
