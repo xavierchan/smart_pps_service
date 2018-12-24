@@ -15,6 +15,8 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from django.conf.urls.static import static
+from django.conf import settings
 
 from rest_framework import routers
 from rest_framework_swagger.views import get_swagger_view
@@ -77,9 +79,11 @@ urlpatterns = [
     url(r'^activity/', include('actstream.urls')),
     # account
     # url(r"^account/", include("account.urls")),
-    url(r'^mdeditor/', include('mdeditor.urls')),
-
+    url(r'^mdeditor/', include('mdeditor.urls'))
 ]
 
-handler404 = views.page_not_found
-handler500 = views.page_error
+#urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+#
+#handler404 = views.page_not_found
+#handler500 = views.page_error
+

@@ -12,6 +12,8 @@ from models import Article
 class ArticleSerializer(serializers.ModelSerializer):
     author = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False)
     author_name = serializers.CharField(source='author.username')
+    upt = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", required=False,
+                                   read_only=True)
 
     class Meta:
         model = Article
