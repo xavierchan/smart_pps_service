@@ -45,7 +45,7 @@ def detail(request, id):
 
 @csrf_exempt
 def get_categorys(request):
-    categorys = list(set(Article.objects.all().values_list('category',
+    categorys = list(set(Article.objects.filter(is_published=True).values_list('category',
                                                            flat=True)))
     if len(categorys[0]) == 0:
         categorys.remove(categorys[0])
@@ -54,7 +54,7 @@ def get_categorys(request):
 
 @csrf_exempt
 def get_tags(request):
-    tags = ",".join(Article.objects.all().values_list('tags', flat=True))
+    tags = ",".join(Article.objects.filter(is_published=True).values_list('tags', flat=True))
     tags = list(set(tags.split(',')))
     if len(tags[0]) == 0:
         tags.remove(tags[0])
