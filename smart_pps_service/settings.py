@@ -45,7 +45,7 @@ DJANGO_APPS = [
     'rest_framework_swagger',
     'raven.contrib.django.raven_compat',
     'djcelery',
-    'social_django',
+#    'social_django',
     'notifications',
     'actstream',
     #'channels',
@@ -67,6 +67,7 @@ LOCAL_APPS = [
     'comic',
     'music',
     'ai',
+    'baby_daily',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS;
@@ -125,15 +126,15 @@ MIDDLEWARE_CLASSES = [
 
 
 AUTHENTICATION_BACKENDS = (
-    'social_core.backends.google.GoogleOAuth2',
-    'social_core.backends.yahoo.YahooOAuth2',
-    'social_core.backends.github.GithubOAuth2',
-    'social_core.backends.twitter.TwitterOAuth',
-    'social_core.backends.facebook.FacebookOAuth2',
-    'social_core.backends.weixin.WeixinOAuth2',
-    'social_core.backends.weibo.WeiboOAuth2',
-    'social_core.backends.qq.QQOAuth2',
-    'social_core.backends.douban.DoubanOAuth2',
+   # 'social_core.backends.google.GoogleOAuth2',
+   # 'social_core.backends.yahoo.YahooOAuth2',
+   # 'social_core.backends.github.GithubOAuth2',
+   # 'social_core.backends.twitter.TwitterOAuth',
+   # 'social_core.backends.facebook.FacebookOAuth2',
+   # 'social_core.backends.weixin.WeixinOAuth2',
+   # 'social_core.backends.weibo.WeiboOAuth2',
+   # 'social_core.backends.qq.QQOAuth2',
+   # 'social_core.backends.douban.DoubanOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -154,8 +155,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'social_django.context_processors.backends',
-                'social_django.context_processors.login_redirect',
+   #             'social_django.context_processors.backends',
+   #             'social_django.context_processors.login_redirect',
             ],
         },
     },
