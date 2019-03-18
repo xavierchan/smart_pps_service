@@ -1,0 +1,97 @@
+{% extends 'common/base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+.comic-body {
+    width: 1070px;
+    margin: 0 auto;
+    padding-top: 20px;
+    padding-bottom: 20px;"
+}
+</style>
+
+{% verbatim %}
+<div id="app" class="comic-body">
+    <el-form ref="preform" :model="preform">
+        <el-form-item label="吃奶量">
+          <el-radio-group v-model="preform.milk_intake">
+            <el-radio label="20">20ml</el-radio>
+            <el-radio label="30">30ml</el-radio>
+            <el-radio label="80">80ml</el-radio>
+            <el-radio label="90">90ml</el-radio>
+            <el-radio label="100">100ml</el-radio>
+            <el-radio label="110">110ml</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="屎">
+          <el-radio-group v-model="preform.shit_size">
+            <el-radio label="">无</el-radio>
+            <el-radio label="few">少量</el-radio>
+            <el-radio label="middle">中等</el-radio>
+            <el-radio label="more">大量</el-radio>
+          </el-radio-group>
+          <el-radio-group v-model="preform.shit_color">
+            <el-radio label="">无色</el-radio>
+            <el-radio label="yellow">蟹黄</el-radio>
+            <el-radio label="yg">黄绿</el-radio>
+            <el-radio label="green">绿色</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="尿">
+          <el-radio-group v-model="preform.urinate_size">
+            <el-radio label="">无</el-radio>
+            <el-radio label="few">少量</el-radio>
+            <el-radio label="middle">中等</el-radio>
+            <el-radio label="more">大量</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item>
+          <el-button>重置</el-button>
+          <el-button type="primary" @click="handleSubmit()">保存</el-button>
+        </el-form-item>
+    </el-form>
+</div>
+{% endverbatim %}
+<script>
+new Vue({
+    el: '#app',
+    data: function () {
+        return {
+            preform: {
+                milk_intake: '90',
+                is_shit: false,
+                is_urinate: false,
+                shit_color: '',
+                shit_size: '',
+                urinate_size: ''
+            }
+        }
+    },
+    methods: {
+        handleSubmit: function () {
+            var _self = this;
+            var data = this.preform
+            if (data.shit_size) {
+                data.is_shit = true;
+            }
+            if (data.urinate_size) {
+                data.is_urinate = true;
+            }
+            var formData = new FormData();
+            formData.append('milk_intake', data.milk_intake);
+            formData.append('is_shit', data.is_shit);
+            formData.append('shit_size', data.shit_size);
+            formData.append('shit_color', data.shit_color);
+            formData.append('urinate_size', data.urinate_size);
+            formData.append('is_urinate', data.is_urinate);
+            _self.$http.post('/api/performs', formData).then(function (res) {
+                console.log('添加成功')
+            }, function () {
+                console.log('请求失败处理');
+            });
+        }
+    }
+})
+</script>
+{% endblock %}

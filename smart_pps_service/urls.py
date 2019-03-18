@@ -27,6 +27,7 @@ from blog import views as blog_views
 from game.views import GameViewSet
 from comic.views import ComicViewSet
 from music.views import MusicViewSet
+from baby_daily.views import DailyPerformViewSet
 from wechat.views import LoginView
 from aliyun_oss import views as aliyun_oss_views
 import views
@@ -43,11 +44,12 @@ router.register(r'orders', OrderViewSet, 'orders')
 router.register(r'games', GameViewSet, 'games')
 router.register(r'comics', ComicViewSet, 'comics')
 router.register(r'musics', MusicViewSet, 'musics')
+router.register(r'performs', DailyPerformViewSet, 'performs')
 
 urlpatterns = [
     url(r'^$', views.index),
     # social
-    url(r'^oauth/', include('social_django.urls', namespace='social')),
+#    url(r'^oauth/', include('social_django.urls', namespace='social')),
     url(r'^login/$', views.user_login, name='login'),
     url(r'^logout/$', views.user_logout, name='logout'),
     url(r'^blog/', include('blog.urls', namespace='blog')),
@@ -55,6 +57,7 @@ urlpatterns = [
     url(r'^ai/', include('ai.urls', namespace='ai')),
     url(r'^comic/', include('comic.urls', namespace='comic')),
     url(r'^music/', include('music.urls', namespace='music')),
+    url(r'^baby/', include('baby_daily.urls', namespace='baby_daily')),
     url(r'^crawler', include('crawler.urls')),
     url(r'^manage$', views.manage),
     url(r'^manage/blogs', blog_views.manage),
